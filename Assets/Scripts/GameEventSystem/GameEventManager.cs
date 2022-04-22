@@ -13,6 +13,7 @@ public class GameEventManager : MonoBehaviour
         {
             if (GameEvents[gameEvent].gameEventName == eventName)
             {
+                Debug.Log("attempting to invoke " + eventName);
                 GameEvents[gameEvent].GameEventSender.Invoke();
             }
         }

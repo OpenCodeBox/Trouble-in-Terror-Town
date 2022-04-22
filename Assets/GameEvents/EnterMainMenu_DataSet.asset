@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: EnterMainMenu_DataSet
   m_EditorClassIdentifier: 
   gameEventData:
-  - valueNameInList: presence_gamemode
+  - valueName: presence_state
     valueType: 1
     returnBool: 0
-    returnString: In main menu
+    returnString: presence_InMainMenu
     returnInt: 0
     returnFloat: 0
     returnVector2: {x: 0, y: 0}

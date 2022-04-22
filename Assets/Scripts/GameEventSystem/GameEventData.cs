@@ -5,6 +5,7 @@ using UnityEngine;
 using MyBox;
 using UnityEditor;
 using UnityEditorInternal;
+using System.Threading.Tasks;
 
 [Serializable]
 public class GameEventData
@@ -38,5 +39,8 @@ public class GameEventData
     [ConditionalField(nameof(valueType), false, returnValueTypeEnum.Vector3)]
     public Vector3 returnVector3;
 
-
+    public static implicit operator Task(GameEventData v)
+    {
+        throw new NotImplementedException();
+    }
 }

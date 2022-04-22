@@ -9,14 +9,17 @@ using UnityEngine.UI;
 
 public class Steam_Login : MonoBehaviour
 {
-    public uint appIdUint;
+    [SerializeField]
     public GameObject EOSManagerPrefab;
-    public EOSManager eOSManager;
-    public string encryptedAppTicketHexString;
-    public byte[] encryptedAppTicket;
+    [SerializeField]
+    private EOSManager eOSManager;
+    private string encryptedAppTicketHexString;
+    private byte[] encryptedAppTicket;
     public UserInfo userInfo;
-    public RawImage test;
-
+    [SerializeField]
+    private RawImage test;
+    [SerializeField]
+    private SteamworksManager steamworks_manager;
 
     public void SteamEOSLogin()
     {

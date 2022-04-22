@@ -12,9 +12,6 @@ public class InitializationManager : MonoBehaviour
 
     void OnEnable()
     {
-        Debug.Log("onenable");
-        gameEventManager.TriggerGameEvent("EnterMainMenu");
-
         startArguments = Environment.GetCommandLineArgs();
 
 #if !UNITY_EDITOR
