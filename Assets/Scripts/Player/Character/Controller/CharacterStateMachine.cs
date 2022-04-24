@@ -4,8 +4,8 @@ namespace TTTSC.Player.Character.Controller
 {
     public class CharacterStateMachine : MonoBehaviour
     {
-        public CharacterState characterState; 
-        public MovementType movementType;
+        public CharacterStates characterState; 
+        public MovementModes movementType;
         public bool ceilingDetected;
         public bool eligibleForStep;
         [Header("Ladder bools")]
@@ -19,14 +19,16 @@ namespace TTTSC.Player.Character.Controller
         public Transform topLadder;
         [HideInInspector]
         public Transform bottomLadder;
-        public enum CharacterState
+
+        //Grounded and InAir is currently set by CharacterHover script
+        public enum CharacterStates
         {
-            OnGround,
+            Grounded,
             InAir,
             InWater
         }
 
-        public enum MovementType
+        public enum MovementModes
         {
             Walk,
             Run,

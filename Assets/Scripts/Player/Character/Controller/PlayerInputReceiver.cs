@@ -5,7 +5,6 @@ using UnityEngine.InputSystem;
 namespace TTTSC.Player.Character.Controller
 {
     [RequireComponent(typeof(CharacterStateMachine))]
-    [RequireComponent(typeof (CharacterMovementConfig))]
     public class PlayerInputReceiver : MonoBehaviour
     {
         private float _lookX, _lookY;

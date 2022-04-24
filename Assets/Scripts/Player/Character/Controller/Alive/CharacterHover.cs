@@ -7,9 +7,11 @@ namespace TTTSC.Player.Character.Controller
     public class CharacterHover : MonoBehaviour
     {
         [SerializeField]
-        CharacterMovementConfig characterConfig;
+        private CharacterReffrenceHub characterReffrenceHub;
+        private CharacterMovementConfig _characterMovementConfig;
+        private CharacterStateMachine _characterStateMachine;
         [SerializeField]
-        Transform _groundCheckOrigin;
+        private Transform _groundCheckOrigins;
         [SerializeField]
         float _groundCheckLength;
         [SerializeField]
@@ -17,13 +19,17 @@ namespace TTTSC.Player.Character.Controller
         public float hoverHight;
         [SerializeField]
         float _hoverStrenght, _hoverDampening;
-        public float hoverForce { get; private set; }
+        public float hoverForces { get; private set; }
 
-        bool _rayStatus;
-        
+        RaycastHit _hoverRayHits;
+
+        bool _rayStatuses;
+
         private void OnDrawGizmos()
         {
-            switch (_rayStatus)
+            Gizmos.DrawLine(_groundCheckOrigins.transform.position, _groundCheckOrigins.transform.position + Vector3.down * _groundCheckLength);
+
+            switch (_rayStatuses)
             {
                 case true:
                     Gizmos.color = Color.green;
@@ -32,7 +38,12 @@ namespace TTTSC.Player.Character.Controller
                     Gizmos.color = Color.red;
                     break;
             }
-            Gizmos.DrawLine(_groundCheckOrigin.position, _groundCheckOrigin.position + Vector3.down * _groundCheckLength);
+        }
+
+        private void Awake()
+        {
+            _characterMovementConfig = characterReffrenceHub.characterMovementConfig;
+            _characterStateMachine = characterReffrenceHub.characterStateMachine;
         }
 
         // Update is called once per frame
@@ -40,23 +51,23 @@ namespace TTTSC.Player.Character.Controller
         {
             Vector3 downVector = transform.TransformDirection(Vector3.down);
 
-            Vector3 characterVelocity = characterConfig.characterRigidbody.velocity;
+            Vector3 characterVelocity = _characterMovementConfig.characterRigidbody.velocity;
 
 
-            _rayStatus = Physics.Raycast(_groundCheckOrigin.position, transform.TransformDirection(Vector3.down), out RaycastHit hit, _groundCheckLength, layerMask: _layerMask);
+            _rayStatuses = Physics.Raycast(_groundCheckOrigins.position, downVector, out _hoverRayHits, _groundCheckLength, _layerMask);
 
-            switch (_rayStatus)
+            switch (_rayStatuses)
             {
                 case true:
 
                     Vector3 otherObjectVelocity = Vector3.zero;
+                    _characterStateMachine.characterState = CharacterStateMachine.CharacterStates.Grounded;
 
-
-                    Rigidbody otherRigidbody = hit.rigidbody;
+                    Rigidbody otherRigidbody = _hoverRayHits.rigidbody;
 
                     if (otherRigidbody != null)
                     {
-                       otherObjectVelocity = otherRigidbody.velocity;
+                        otherObjectVelocity = otherRigidbody.velocity;
 
                     }
 
@@ -65,23 +76,25 @@ namespace TTTSC.Player.Character.Controller
 
                     float realVelocity = characterDirectionalVelocity - otherObjectDirectionalVelocity;
 
-                    float characterHightDiffrence = hit.distance - hoverHight;
+                    float characterHightDiffrence = _hoverRayHits.distance - hoverHight;
 
-                    hoverForce = (characterHightDiffrence * _hoverStrenght) - (realVelocity * _hoverDampening) * Time.deltaTime;
+                    hoverForces = (characterHightDiffrence * _hoverStrenght) - (realVelocity * _hoverDampening) * Time.deltaTime;
 
 
-                    //Debug.Log("found ground " + characterHightDiffrence);
+                    //Debug.Log("ray number " + ray + " found ground " + characterHightDiffrence);
 
                     break;
 
                 case false:
+                    _characterStateMachine.characterState = CharacterStateMachine.CharacterStates.InAir;
 
-                    hoverForce = 0;
+                    hoverForces = 0;
 
-                    //Debug.Log("did not found ground");
+                    //Debug.Log("ray number " + ray + " did not found ground");
 
                     break;
             }
+
         }
     }
 }

@@ -115,12 +115,12 @@
                 },
                 {
                     "name": "Look",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "bf60ade9-f32c-42bc-a5a2-963c35d51b10",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
