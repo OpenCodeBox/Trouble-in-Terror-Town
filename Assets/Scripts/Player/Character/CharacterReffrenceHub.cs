@@ -4,7 +4,9 @@ namespace TTTSC.Player.Character
 {
     public class CharacterReffrenceHub : MonoBehaviour
     {
+        [Header("-----------Misc------------")]
         public Rigidbody characterRigidbody;
+        [Header("----------Scripts-----------")]
         public PlayerStateEnforcer playerStateEnforcrer;
         public PlayerStateMachine playerStateMachine;
         public Controller.CharacterMovementConfig characterMovementConfig;

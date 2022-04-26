@@ -336,6 +336,7 @@ GameObject:
   - component: {fileID: 275207158}
   - component: {fileID: 275207159}
   - component: {fileID: 275207161}
+  - component: {fileID: 275207163}
   - component: {fileID: 275207162}
   m_Layer: 0
   m_Name: Alive
@@ -397,7 +398,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _ReffrenceHub: {fileID: 1551772761}
-  moveType: 1
   _hoverForceMode: 3
   _moveForceMode: 2
   _characterDrag: 10
@@ -435,10 +435,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterRigidbody: {fileID: 1551772756}
-  moveSpeed: 70
-  airControlStrength: 70
-  crouchSpeedDecrease: 0
-  sprintSpeedIncrease: 0
+  moveSpeed: 1
+  airControlStrength: 0.1
+  crouchSpeedDecrease: 2
+  sprintSpeedIncrease: 1.5
   ladderClimbingSpeed: 0
   jumpPower: 0
   crouchHeight: 0
@@ -486,6 +486,19 @@ MonoBehaviour:
   enteredLadderFromTop: 0
   topLadder: {fileID: 0}
   bottomLadder: {fileID: 0}
+--- !u!114 &275207163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 275207155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68e69a066cfcd3b45b91db0b5825eea3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _reffrenceHub: {fileID: 0}
 --- !u!1 &351313843
 GameObject:
   m_ObjectHideFlags: 0
@@ -3072,7 +3085,6 @@ GameObject:
   - component: {fileID: 1551772752}
   - component: {fileID: 1551772758}
   - component: {fileID: 1551772756}
-  - component: {fileID: 1551772762}
   m_Layer: 0
   m_Name: Player_Ghost
   m_TagString: Untagged
@@ -3171,29 +3183,6 @@ MonoBehaviour:
   playerInputReceiver: {fileID: 1551772752}
   characterHover: {fileID: 275207159}
   characterStateChanger: {fileID: 275207161}
---- !u!114 &1551772762
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1551772751}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11afecc1cbbd8e8449477483a5577cb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterState: 0
-  movementStates: 0
-  ceilingDetected: 0
-  eligibleForStep: 0
-  onLadder: 0
-  topOnLadder: 0
-  bottomOnLadder: 0
-  enteredLadderFromBottom: 0
-  enteredLadderFromTop: 0
-  topLadder: {fileID: 0}
-  bottomLadder: {fileID: 0}
 --- !u!1 &1591108313
 GameObject:
   m_ObjectHideFlags: 0
