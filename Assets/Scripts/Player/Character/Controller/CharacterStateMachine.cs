@@ -5,7 +5,7 @@ namespace TTTSC.Player.Character.Controller
     public class CharacterStateMachine : MonoBehaviour
     {
         public CharacterStates characterState; 
-        public MovementModes movementType;
+        public MovementStates movementStates;
         public bool ceilingDetected;
         public bool eligibleForStep;
         [Header("Ladder bools")]
@@ -28,11 +28,12 @@ namespace TTTSC.Player.Character.Controller
             InWater
         }
 
-        public enum MovementModes
+        public enum MovementStates
         {
-            Walk,
-            Run,
-            Crouch
+            Idle,
+            Walking,
+            Crouching,
+            Sprinting
         }
 
         public enum ActionState

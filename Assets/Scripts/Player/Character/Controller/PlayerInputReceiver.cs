@@ -8,7 +8,7 @@ namespace TTTSC.Player.Character.Controller
     public class PlayerInputReceiver : MonoBehaviour
     {
         private float _lookX, _lookY;
-    
+
         public event Action<Vector2, bool> MoveInputEvent, LookInputEvent;
         public event Action<bool> SprintInputEvent, CrouchInputEvent, JumpInputEvent;
 
@@ -18,7 +18,7 @@ namespace TTTSC.Player.Character.Controller
         private void OnEnable()
         {
             playerInputEvents = new PlayerInputSender();
-        
+
             playerInputEvents.Enable();
             playerInputEvents.Controlls.Walk.performed += WalkInputReceiver;
             playerInputEvents.Controlls.LookX.performed += LookXInputReceiver;
@@ -38,22 +38,102 @@ namespace TTTSC.Player.Character.Controller
             playerInputEvents.Controlls.Crouch.performed -= CrouchInputReceiver;
         }
 
+        bool FloatBool(float a, string calculationOperator, float b)
+        {
+            bool result = false;
+
+            switch (calculationOperator)
+            {
+
+                case "==":
+
+                    if (a == b)
+                    {
+                        result = true;
+                    }
+                    else
+                    {
+                        result = false;
+                    }
+                    break;
+
+                case "!=":
+
+                    if (a != b)
+                    {
+                        result = true;
+                    }
+                    else
+                    {
+                        result = false;
+                    }
+                    break;
+
+                case ">=":
+
+                    if (a >= b)
+                    {
+                        result = true;
+                    }
+                    else
+                    {
+                        result = false;
+                    }
+                    break;
+
+                case "<=":
+
+                    if (a <= b)
+                    {
+                        result = true;
+                    }
+                    else
+                    {
+                        result = false;
+                    }
+                    break;
+
+                case ">":
+
+                    if (a > b)
+                    {
+                        result = true;
+                    }
+                    else
+                    {
+                        result = false;
+                    }
+                    break;
+
+                case "<":
+
+                    if (a < b)
+                    {
+                        result = true;
+                    }
+                    else
+                    {
+                        result = false;
+                    }
+                    break;
+            }
+            return result;
+        }
+
         private void LookXInputReceiver(InputAction.CallbackContext ctx)
         {
             var value = ctx.ReadValue<float>();
-            bool performing = value != 0;
 
             _lookX = value;
-            Look(performing);
+            Look(FloatBool(value, "!=", 0));
         }
 
         private void LookYInputReceiver(InputAction.CallbackContext ctx)
         {
-            var value = ctx.ReadValue<float>();
-            bool performing = value != 0;
+            float value = ctx.ReadValue<float>();
 
             _lookY = value;
-            Look(performing);
+            Look(FloatBool(value, "!=", 0));
         }
 
         private void Look(bool performing)
@@ -67,19 +147,23 @@ namespace TTTSC.Player.Character.Controller
         {
             var value = ctx.ReadValue<Vector2>();
 
-            bool performing = !(value == new Vector2(0,0));
+            bool performing = !(value == new Vector2(0, 0));
 
             MoveInputEvent?.Invoke(value, performing);
         }
 
         private void SprintInputReceiver(InputAction.CallbackContext ctx)
         {
-            SprintInputEvent?.Invoke(ctx.ReadValue<bool>());
+            float value = ctx.ReadValue<float>();
+
+            SprintInputEvent?.Invoke(FloatBool(value, "==", 1));
         }
 
         private void CrouchInputReceiver(InputAction.CallbackContext ctx)
         {
-            CrouchInputEvent?.Invoke(ctx.ReadValue<bool>());
+            float value = ctx.ReadValue<float>();
+
+            CrouchInputEvent?.Invoke(FloatBool(value, "==", 1));
         }
 
         private void JumpInputReceiver(InputAction.CallbackContext ctx)

@@ -60,7 +60,7 @@ namespace TTTSC.Player.Character.Controller
                     ""name"": ""Jump"",
                     ""type"": ""PassThrough"",
                     ""id"": ""edb5e334-0aab-4f72-8872-53382954c983"",
-                    ""expectedControlType"": """",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false

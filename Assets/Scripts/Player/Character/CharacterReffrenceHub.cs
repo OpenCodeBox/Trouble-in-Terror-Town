@@ -11,6 +11,7 @@ namespace TTTSC.Player.Character
         public Controller.CharacterStateMachine characterStateMachine;
         public Controller.PlayerInputReceiver playerInputReceiver;
         public Controller.CharacterHover characterHover;
+        public Controller.CharacterStateChanger characterStateChanger;
     }
 }
 

@@ -47,7 +47,7 @@ namespace TTTSC.Player.Character.Controller.Alive
         private void MoveInput(Vector2 moveDirection, bool performing)
         {
             _performingMoveInput = performing;
-            _moveDirection = new Vector3(moveDirection.x, 0, moveDirection.y);
+            _moveDirection = new Vector2(moveDirection.x, moveDirection.y);
         }
 
         #endregion
@@ -70,38 +70,37 @@ namespace TTTSC.Player.Character.Controller.Alive
         private void FixedUpdate()
         {
 
-
-
-
             //if (_characterRigidbody.velocity.x != 0f || _characterRigidbody.velocity.z != 0f)
             //Debug.Log("character speed x: " + _characterRigidbody.velocity.x + "character speed z:" + _characterRigidbody.velocity.z);
 
             Vector3 downVector = transform.TransformDirection(Vector3.down);
 
-            _characterRigidbody.drag = _characterDrag;
-
+            Drag();
+            
             switch (_characterStateMachine.characterState)
             {
                 case CharacterStateMachine.CharacterStates.Grounded:
-                    _characterRigidbody.drag = _characterDrag;
+                    switch (moveType)
+                    {
+                        case MoveTypes.Velocity:
+                            VelocityChangeMover();
+                            break;
+                        case MoveTypes.AddForce:
+                            AddForceMover();
+                            break;
+                    }
+
                     break;
-                default:
-                    _characterRigidbody.drag = 0;
+                case CharacterStateMachine.CharacterStates.InAir:
+                    InAirMove();
+
                     break;
             }
             
 
             _characterRigidbody.AddForce(_characterHover.hoverForces * downVector, ForceMode.VelocityChange);
 
-            switch (moveType)
-            {
-                case MoveTypes.Velocity:
-                    VelocityChangeMover();
-                    break;
-                case MoveTypes.AddForce:
-                    AddForceMover();
-                    break;
-            }
+
 
 
         }
@@ -110,15 +109,45 @@ namespace TTTSC.Player.Character.Controller.Alive
         private void VelocityChangeMover()
         {
 
-            Vector3 movement = _characterMovementConfig.moveSpeed * _moveDirection.x * Time.deltaTime * transform.right + _characterRigidbody.velocity.y * transform.up + _characterMovementConfig.moveSpeed * _moveDirection.z * Time.deltaTime * transform.forward;
+            Vector3 movement = _characterMovementConfig.moveSpeed * _moveDirection.x * Time.deltaTime * transform.right + _characterRigidbody.velocity.y * transform.up + _characterMovementConfig.moveSpeed * _moveDirection.y * Time.deltaTime * transform.forward;
             _characterRigidbody.velocity = movement;
         }
 
         private void AddForceMover()
         {
-            Vector3 movement = _characterMovementConfig.moveSpeed * _moveDirection.x * Time.deltaTime * transform.right + _characterMovementConfig.moveSpeed * _moveDirection.z * Time.deltaTime * transform.forward;
 
 
+            switch (_characterStateMachine.movementStates)
+            {
+                case CharacterStateMachine.MovementStates.Walking:
+                    Walk();
+                    break;
+
+                case CharacterStateMachine.MovementStates.Crouching:
+
+                    break;
+
+                case CharacterStateMachine.MovementStates.Sprinting:
+
+                    break;
+            }
+
+
+        }
+
+        private void Drag()
+        {
+            float multiplier = 1.0f - _characterDrag * Time.fixedDeltaTime;
+            if (multiplier < 0.0f) multiplier = 0.0f;
+
+            Vector3 newVelocity = new(_characterRigidbody.velocity.x * multiplier, _characterRigidbody.velocity.y, multiplier * _characterRigidbody.velocity.z);
+
+            _characterRigidbody.velocity = newVelocity;
+        }
+
+        private void Walk()
+        {
+            Vector3 movement = _characterMovementConfig.moveSpeed * _moveDirection.x * Time.deltaTime * transform.right + _characterMovementConfig.moveSpeed * _moveDirection.y * Time.deltaTime * transform.forward;
 
             if (_characterStateMachine.characterState == CharacterStateMachine.CharacterStates.Grounded)
                 switch (_moveForceMode)
@@ -133,13 +162,19 @@ namespace TTTSC.Player.Character.Controller.Alive
                         _characterRigidbody.AddForce(movement.normalized, ForceMode.Impulse);
                         break;
                     case ForceModes.velocityChange:
-                        _characterRigidbody.AddForce(movement, ForceMode.VelocityChange);
+                        _characterRigidbody.AddForce(movement.normalized, ForceMode.VelocityChange);
                         break;
                 }
         }
 
-        private void Walk()
+        private void InAirMove()
         {
+            Vector3 movement = _characterMovementConfig.airControlStrength * _moveDirection.x * Time.deltaTime * transform.right + _characterMovementConfig.airControlStrength * _moveDirection.y * Time.deltaTime * transform.forward;
+
+            if (_characterStateMachine.movementStates == CharacterStateMachine.MovementStates.Walking)
+            {
+                _characterRigidbody.AddForce(movement.normalized, ForceMode.Impulse);
+            }
 
         }
     }
