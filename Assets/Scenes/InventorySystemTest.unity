@@ -557,6 +557,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 740122246}
     m_Modifications:
+    - target: {fileID: 4618792495020702613, guid: a6c9897145ea93b41abf3c531f857e3b,
+        type: 3}
+      propertyPath: maxNormalmSlots
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 4618792496510273084, guid: a6c9897145ea93b41abf3c531f857e3b,
         type: 3}
       propertyPath: m_RootOrder

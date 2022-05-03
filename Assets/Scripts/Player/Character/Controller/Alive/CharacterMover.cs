@@ -15,12 +15,21 @@ namespace TTTSC.Player.Character.Controller.Alive
         private CharacterHover _characterHover;
         private PlayerInputReceiver _playerInputReceiver;
         private Rigidbody _characterRigidbody;
+
+        [SerializeField]
+        private float _inAirCounterForce, _moveCounterForce;
+        
+        [SerializeField]
+        private bool _autoB_Hop;
+        
         [SerializeField]
         private ForceModes _hoverForceMode, _moveForceMode;
 
         [SerializeField]
         private float _characterDrag;
 
+        private float _jumpStageValue;
+        private bool _jumpInputHeld;
         private bool _performingMoveInput;
         private Vector3 _moveDirection;
 
@@ -32,7 +41,10 @@ namespace TTTSC.Player.Character.Controller.Alive
             _characterMovementConfig = _ReffrenceHub.characterMovementConfig;
             _characterHover = _ReffrenceHub.characterHover;
             _playerInputReceiver = _ReffrenceHub.playerInputReceiver;
+
+
             _playerInputReceiver.MoveInputEvent += MoveInput;
+            _playerInputReceiver.JumpInputEvent += JumpInput;
         }
 
         void Start()
@@ -48,6 +60,13 @@ namespace TTTSC.Player.Character.Controller.Alive
             _moveDirection = new Vector2(moveDirection.x, moveDirection.y);
         }
 
+        //Remember to change jumpPower from 0 to some other number that preferably is in the positives and not negatives
+        private void JumpInput(bool performed, float stageValue)
+        {
+            _jumpInputHeld = performed;
+            _jumpStageValue = stageValue;
+        }
+
         #endregion
 
         enum ForceModes
@@ -61,6 +80,7 @@ namespace TTTSC.Player.Character.Controller.Alive
 
         private void FixedUpdate()
         {
+
             Vector3 downVector = transform.TransformDirection(Vector3.down);
 
             Drag();
@@ -68,20 +88,29 @@ namespace TTTSC.Player.Character.Controller.Alive
             switch (_characterStateMachine.characterState)
             {
                 case CharacterStateMachine.CharacterStates.Grounded:
-                    _characterDrag = 10;
+                    if (_characterStateMachine.movementStates == CharacterStateMachine.MovementStates.Idle)
+                    {
+                        _characterDrag = _characterMovementConfig.idleDrag;
+                    }
+                    else
+                    {
+                        _characterDrag = _characterMovementConfig.moveDrag;
+                    }
 
                     Move();
 
+                    Jump();
+                    
                     break;
                 case CharacterStateMachine.CharacterStates.InAir:
-                    _characterDrag = 0;
+                    _characterDrag = _characterMovementConfig.inAirDrag;
                     InAirMove();
 
                     break;
             }
             
 
-            _characterRigidbody.AddForce(_characterHover.hoverForces * downVector, ForceMode.VelocityChange);
+            _characterRigidbody.AddForce(_characterHover.hoverForce * downVector, ForceMode.VelocityChange);
 
 
         }
@@ -120,48 +149,92 @@ namespace TTTSC.Player.Character.Controller.Alive
         private void InAirMove()
         {
             Vector3 movement = _moveDirection.x * Time.deltaTime * transform.right + _moveDirection.y * Time.deltaTime * transform.forward;
+            
+            Vector3 normalizedMovement = movement.normalized * _characterMovementConfig.airControlForce;
 
-            Vector3 normalizedMovement = movement.normalized * _characterMovementConfig.airControlStrength;
+            Vector3 counterForce = -movement.normalized * _inAirCounterForce;
+
 
 
 
             if (_characterStateMachine.movementStates == CharacterStateMachine.MovementStates.Walking)
             {
-                _characterRigidbody.AddForce(normalizedMovement, ForceMode.Impulse);
+                _characterRigidbody.AddForce(normalizedMovement, ForceMode.VelocityChange);
+                _characterRigidbody.AddForce(counterForce, ForceMode.VelocityChange);
             }
 
         }
 
         private void Jump()
         {
+            
+            switch (_autoB_Hop)
+            {
+                case true:
+                    if (_jumpInputHeld && _characterStateMachine.movementStates != CharacterStateMachine.MovementStates.Crouching)
+                    {
+                        _characterRigidbody.velocity = new Vector3(_characterRigidbody.velocity.x, 0f, _characterRigidbody.velocity.z);
+                        _characterRigidbody.AddForce(_characterMovementConfig.jumpForce * transform.up, ForceMode.VelocityChange);
+                    }
+                    break;
+                case false:
+                    if (_jumpStageValue == 1 && _characterStateMachine.movementStates != CharacterStateMachine.MovementStates.Crouching)
+                    {
+                        _characterRigidbody.velocity = new Vector3(_characterRigidbody.velocity.x, 0f, _characterRigidbody.velocity.z);
+                        _characterRigidbody.AddForce(_characterMovementConfig.jumpForce * transform.up, ForceMode.VelocityChange);
+                    }
+                    break;
+                    
+            }
+            
 
         }
-
+        
         private void Walking()
         {
             Vector3 movement = _moveDirection.x * Time.deltaTime * transform.right + _moveDirection.y * Time.deltaTime * transform.forward;
 
-            Vector3 normalizedMovement = movement.normalized * _characterMovementConfig.moveSpeed;
+            Vector3 normalizedMovement = movement.normalized * _characterMovementConfig.moveForce;
 
-            _characterRigidbody.AddForce(normalizedMovement, ForceMode.Impulse);
+            Vector3 counterForce = -movement.normalized * _characterMovementConfig.moveCounterForce;
+
+            _characterRigidbody.AddForce(normalizedMovement, ForceMode.VelocityChange);
+            //_characterRigidbody.AddForce(counterForce, ForceMode.VelocityChange);
         }
 
         private void Crouching()
         {
+            //bool switched;
+
             Vector3 movement = _moveDirection.x * Time.deltaTime * transform.right + _moveDirection.y * Time.deltaTime * transform.forward;
 
-            Vector3 normalizedMovement = movement.normalized * _characterMovementConfig.moveSpeed / _characterMovementConfig.crouchSpeedDecrease;
-
-            _characterRigidbody.AddForce(normalizedMovement, ForceMode.Impulse);
+            Vector3 normalizedMovement = movement.normalized * _characterMovementConfig.crouchMoveForce;
+            
+            Vector3 counterForce = -movement.normalized * _characterMovementConfig.crouchMoveCounterForce;
+            
+            /*(switch (switched)
+            {
+                case false:
+                    _characterRigidbody.AddForce(_characterRigidbody.velocity, ForceMode.VelocityChange);
+                    switched = true;
+                    break;
+            }*/
+            
+            _characterRigidbody.AddForce(normalizedMovement, ForceMode.VelocityChange);
+            //_characterRigidbody.AddForce(counterForce, ForceMode.VelocityChange);
         }
 
         private void Sprinting()
         {
+            
             Vector3 movement = _moveDirection.x * Time.deltaTime * transform.right + _moveDirection.y * Time.deltaTime * transform.forward;
 
-            Vector3 normalizedMovement = movement.normalized * _characterMovementConfig.moveSpeed * _characterMovementConfig.sprintSpeedIncrease;
+            Vector3 normalizedMovement = movement.normalized * _characterMovementConfig.sprintMoveForce;
+            
+            Vector3 counterForce = -movement.normalized *_characterMovementConfig.sprintMoveCounterForce;
 
-            _characterRigidbody.AddForce(normalizedMovement, ForceMode.Impulse);
+            _characterRigidbody.AddForce(normalizedMovement, ForceMode.VelocityChange);
+            //_characterRigidbody.AddForce(counterForce, ForceMode.VelocityChange);
         }
 
     }

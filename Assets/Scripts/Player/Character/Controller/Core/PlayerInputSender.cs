@@ -62,7 +62,7 @@ namespace TTTSC.Player.Character.Controller
                     ""id"": ""edb5e334-0aab-4f72-8872-53382954c983"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold(duration=0.2)"",
                     ""initialStateCheck"": false
                 },
                 {

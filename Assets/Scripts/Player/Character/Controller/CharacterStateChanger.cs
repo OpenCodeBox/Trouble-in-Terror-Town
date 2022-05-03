@@ -11,7 +11,7 @@ namespace TTTSC.Player.Character.Controller
         private PlayerInputReceiver _playerInputReceiver;
         private CharacterStateMachine _characterStateMachine;
 
-        private bool _walkIsPerforming, _crouchIsPerforming, _sprintIsPerforming;
+        private bool _walkIsPerforming, _crouchIsHeld, _sprintIsPerforming;
 
         private void Awake()
         {
@@ -29,36 +29,32 @@ namespace TTTSC.Player.Character.Controller
         private void Walk(Vector2 direction, bool performing)
         {
             _walkIsPerforming = performing;
-
-
         }
 
-        private void Crouch(bool performing)
+        private void Crouch(bool performing, float stageValue)
         {
-            _crouchIsPerforming = performing;
-
-            if (!_sprintIsPerforming)
-                _characterStateMachine.movementStates = CharacterStateMachine.MovementStates.Crouching;
+            _crouchIsHeld = performing;
         }
 
-        private void Sprint(bool performing)
+        private void Sprint(bool held, float stageValue)
         {
-            _sprintIsPerforming = performing;
-
-
+            _sprintIsPerforming = held;
         }
 
         private void Update()
         {
 
-            if (_walkIsPerforming && !_crouchIsPerforming && !_sprintIsPerforming)
+            if (_crouchIsHeld && !_sprintIsPerforming)
+                _characterStateMachine.movementStates = CharacterStateMachine.MovementStates.Crouching;
+
+            if (_walkIsPerforming && !_crouchIsHeld && !_sprintIsPerforming)
                 _characterStateMachine.movementStates = CharacterStateMachine.MovementStates.Walking;
 
-            if (_sprintIsPerforming && !_crouchIsPerforming && _walkIsPerforming)
+            if (_sprintIsPerforming && !_crouchIsHeld && _walkIsPerforming)
                 _characterStateMachine.movementStates = CharacterStateMachine.MovementStates.Sprinting;
 
 
-            if (!_walkIsPerforming && !_crouchIsPerforming && !_sprintIsPerforming)
+            if (!_walkIsPerforming && !_crouchIsHeld && !_sprintIsPerforming)
             {
                 _characterStateMachine.movementStates = CharacterStateMachine.MovementStates.Idle;
             }
