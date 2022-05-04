@@ -7,17 +7,19 @@ namespace TTTSC.Player
     public class PlayerStateEnforcer : MonoBehaviour
     {
         private PlayerStateMachine _playerStateMachine;
-        [SerializeField][Tooltip("assign a body prefab to this")]
-        private GameObject playerBodyPrefab;
+        [SerializeField][Tooltip("assign the 'alive' prefab here")]
+        private GameObject alivePlayerPrefab;
+        private GameObject spectatorPlayerPrefab;
+
 
         void CheckPlayerState()
         {
-            switch (_playerStateMachine.currentPlayerGameState)
+            switch (_playerStateMachine.currentPlayerPlayState)
             {
-                case PlayerStateMachine.playerGameStates.Dead:
+                case PlayerStateMachine.playerPlayStates.Spectator:
                     //add logic for turning player in to a spectator
                     break;
-                case PlayerStateMachine.playerGameStates.Alive:
+                case PlayerStateMachine.playerPlayStates.Alive:
                     //add logic for making player "alive"
                     //basicaly just reset player's stats
                     break;

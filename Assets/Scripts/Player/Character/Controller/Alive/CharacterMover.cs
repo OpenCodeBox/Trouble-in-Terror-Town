@@ -7,17 +7,18 @@ namespace TTTSC.Player.Character.Controller.Alive
     public class CharacterMover : MonoBehaviour
     {
         [SerializeField]
-        private CharacterReffrenceHub _ReffrenceHub;
+        private PlayerGhostReffrenceHub _playerGhostReffrenceHub;
+        
+        [SerializeField]
+        private AliveReffrenceHub _aliveReffrenceHub;
         private PlayerStateMachine _playerStateMachine;
         private PlayerStateEnforcer _playerStateEnforcer;
         private CharacterStateMachine _characterStateMachine;
         private CharacterMovementConfig _characterMovementConfig;
-        private CharacterHover _characterHover;
+        private GroundCheck _characterHover;
         private PlayerInputReceiver _playerInputReceiver;
         private Rigidbody _characterRigidbody;
 
-        [SerializeField]
-        private float _inAirCounterForce, _moveCounterForce;
         
         [SerializeField]
         private bool _autoB_Hop;
@@ -35,12 +36,14 @@ namespace TTTSC.Player.Character.Controller.Alive
 
         private void Awake()
         {
-            _playerStateMachine = _ReffrenceHub.playerStateMachine;
-            _playerStateEnforcer = _ReffrenceHub.playerStateEnforcrer;
-            _characterStateMachine = _ReffrenceHub.characterStateMachine;
-            _characterMovementConfig = _ReffrenceHub.characterMovementConfig;
-            _characterHover = _ReffrenceHub.characterHover;
-            _playerInputReceiver = _ReffrenceHub.playerInputReceiver;
+            _playerGhostReffrenceHub = GetComponentInParent<PlayerGhostReffrenceHub>();
+            _characterRigidbody = _playerGhostReffrenceHub.characterRigidbody;
+            _playerStateMachine = _playerGhostReffrenceHub.playerStateMachine;
+            _playerStateEnforcer = _playerGhostReffrenceHub.playerStateEnforcrer;
+            _characterStateMachine = _aliveReffrenceHub.characterStateMachine;
+            _characterMovementConfig = _aliveReffrenceHub.characterMovementConfig;
+            _characterHover = _aliveReffrenceHub.characterHover;
+            _playerInputReceiver = _playerGhostReffrenceHub.playerInputReceiver;
 
 
             _playerInputReceiver.MoveInputEvent += MoveInput;
@@ -49,7 +52,7 @@ namespace TTTSC.Player.Character.Controller.Alive
 
         void Start()
         {
-            _characterRigidbody = _characterMovementConfig.characterRigidbody;
+            _characterRigidbody = _playerGhostReffrenceHub.characterRigidbody;
         }
 
         #region Input event listeners
@@ -127,7 +130,6 @@ namespace TTTSC.Player.Character.Controller.Alive
 
         private void Move()
         {
-
             switch (_characterStateMachine.movementStates)
             {
                 case CharacterStateMachine.MovementStates.Walking:
@@ -142,8 +144,6 @@ namespace TTTSC.Player.Character.Controller.Alive
                     Sprinting();
                     break;
             }
-
-
         }
 
         private void InAirMove()
@@ -152,7 +152,7 @@ namespace TTTSC.Player.Character.Controller.Alive
             
             Vector3 normalizedMovement = movement.normalized * _characterMovementConfig.airControlForce;
 
-            Vector3 counterForce = -movement.normalized * _inAirCounterForce;
+            Vector3 counterForce = -movement.normalized * _characterMovementConfig.airControlCounterForce;
 
 
 
@@ -196,7 +196,7 @@ namespace TTTSC.Player.Character.Controller.Alive
 
             Vector3 normalizedMovement = movement.normalized * _characterMovementConfig.moveForce;
 
-            Vector3 counterForce = -movement.normalized * _characterMovementConfig.moveCounterForce;
+            //Vector3 counterForce = -movement.normalized * _characterMovementConfig.moveCounterForce;
 
             _characterRigidbody.AddForce(normalizedMovement, ForceMode.VelocityChange);
             //_characterRigidbody.AddForce(counterForce, ForceMode.VelocityChange);
@@ -210,7 +210,7 @@ namespace TTTSC.Player.Character.Controller.Alive
 
             Vector3 normalizedMovement = movement.normalized * _characterMovementConfig.crouchMoveForce;
             
-            Vector3 counterForce = -movement.normalized * _characterMovementConfig.crouchMoveCounterForce;
+            //Vector3 counterForce = -movement.normalized * _characterMovementConfig.crouchMoveCounterForce;
             
             /*(switch (switched)
             {
@@ -231,7 +231,7 @@ namespace TTTSC.Player.Character.Controller.Alive
 
             Vector3 normalizedMovement = movement.normalized * _characterMovementConfig.sprintMoveForce;
             
-            Vector3 counterForce = -movement.normalized *_characterMovementConfig.sprintMoveCounterForce;
+            //Vector3 counterForce = -movement.normalized *_characterMovementConfig.sprintMoveCounterForce;
 
             _characterRigidbody.AddForce(normalizedMovement, ForceMode.VelocityChange);
             //_characterRigidbody.AddForce(counterForce, ForceMode.VelocityChange);

@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace TTTSC.Player.Character.Controller
 {
+    [RequireComponent(typeof(CharacterStateMachine))]
     public class CharacterStateChanger : MonoBehaviour
     {
-        [SerializeField]
-        private CharacterReffrenceHub _characterReffrenceHub;
+        private PlayerGhostReffrenceHub _playerGhostReffrenceHub;
         private PlayerInputReceiver _playerInputReceiver;
         private CharacterStateMachine _characterStateMachine;
 
@@ -15,8 +15,9 @@ namespace TTTSC.Player.Character.Controller
 
         private void Awake()
         {
-            _playerInputReceiver = _characterReffrenceHub.playerInputReceiver;
-            _characterStateMachine = _characterReffrenceHub.characterStateMachine;
+            _playerGhostReffrenceHub = GetComponentInParent<PlayerGhostReffrenceHub>();
+            _playerInputReceiver = _playerGhostReffrenceHub.playerInputReceiver;
+            _characterStateMachine = GetComponent<CharacterStateMachine>();
         }
 
         private void Start()

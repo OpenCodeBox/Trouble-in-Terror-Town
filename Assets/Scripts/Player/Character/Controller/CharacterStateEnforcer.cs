@@ -7,33 +7,20 @@ namespace TTTSC.Player.Character.Controller
     public class CharacterStateEnforcer : MonoBehaviour
     {
         [SerializeField]
-        private CharacterReffrenceHub _reffrenceHub;
-
-
-        [Header("Normal")]
-        [SerializeField]
-        private Vector3 _desieredStandingColliderPosition;
-        [SerializeField]
-        private float _desieredStandingColliderHight;
-
-        [Header("Crouched")]
-        [SerializeField]
-        private Vector3 _desieredCrouchedColliderPosition;
-        [SerializeField]
-        private float _desieredCrouchedColliderHight;
-        
+        private PlayerGhostReffrenceHub _aliveReffrenceHub;
 
         [SerializeField]
         private CapsuleCollider _characterEnviormentCollider;
         private CharacterMovementConfig _characterMovementConfig;
-        private CharacterHover _characterHover;
+        private GroundCheck _characterHover;
         private CharacterStateMachine _characterStateMachine;
 
 
         // Start is called before the first frame update
         void Start()
         {
-            _characterHover = GetComponent<CharacterHover>();
+            _aliveReffrenceHub = GetComponentInParent<PlayerGhostReffrenceHub>();
+            _characterHover = GetComponent<GroundCheck>();
             _characterMovementConfig = GetComponent<CharacterMovementConfig>();
             _characterStateMachine = GetComponent<CharacterStateMachine>();
         }
@@ -56,17 +43,17 @@ namespace TTTSC.Player.Character.Controller
         {
             _characterHover.currentHoverHight = _characterMovementConfig.crouchHeight;
 
-            _characterEnviormentCollider.height = _desieredCrouchedColliderHight;
-            _characterEnviormentCollider.center = _desieredCrouchedColliderPosition;
+            _characterEnviormentCollider.height = _characterMovementConfig.crouchedColliderHight;
+            _characterEnviormentCollider.center = _characterMovementConfig.crouchedColliderPosition * transform.up;
         }
 
         private void CharacterDefault()
         {
             _characterHover.currentHoverHight = _characterMovementConfig.desieredHoverHight;
 
-            _characterEnviormentCollider.height = _desieredStandingColliderHight;
-            _characterEnviormentCollider.center = _desieredStandingColliderPosition;
-
+            _characterEnviormentCollider.height = _characterMovementConfig.standingColliderHight;
+            _characterEnviormentCollider.center = _characterMovementConfig.standingColliderPosition * transform.up;
+            
         }
     }
 }

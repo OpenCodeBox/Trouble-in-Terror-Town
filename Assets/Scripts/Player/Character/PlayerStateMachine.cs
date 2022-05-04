@@ -6,13 +6,13 @@ namespace TTTSC.Player
 {
     public class PlayerStateMachine : MonoBehaviour
     {
-        public enum playerGameStates
+        public enum playerPlayStates
         {
-            Dead,
+            Spectator,
             Alive
         };
 
-        public playerGameStates currentPlayerGameState;
+        public playerPlayStates currentPlayerPlayState;
 
         public enum playerClass
         {

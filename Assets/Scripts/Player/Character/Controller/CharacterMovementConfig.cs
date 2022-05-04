@@ -4,21 +4,22 @@ namespace TTTSC.Player.Character.Controller
 {
     public class CharacterMovementConfig : MonoBehaviour
     {
-        public Rigidbody characterRigidbody; // Rigidbody that will be used for moving character around
-
-        [Header("On Ground")]
+        [Header("Move on ground")]
         public float moveForce; // This value controlls at what speed your character walks
-        public float moveCounterForce; // This value controlls at what speed your character walks
         public float crouchMoveForce; // This value controlls how much slower are you while crouching (equasion: walkSpeed / crouchSpeedDecrease) 
-        public float crouchMoveCounterForce; // This value controlls how much slower are you while crouching (equasion: walkSpeed / crouchSpeedDecrease) 
         public float sprintMoveForce; // This value controlls how much faster are you while sprinting (equasion: walkSpeed * sprintSpeedIncrease)
-        public float sprintMoveCounterForce; // This value controlls h                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ow much faster are you while sprinting (equasion: walkSpeed * sprintSpeedIncrease)
         public float ladderClimbingForce; // This value controlls how fast dose the character climb ladders
         public float desieredHoverHight;
         public float crouchHeight; // This value controlls the hight of player when crouched
-        public float crouchSmoothing; // This value controlls the transition speed of standing to crouch and viceversa
         public bool allowSprint; // bool for enabling sprint
         public float jumpForce; // This value controlls character's jump height
+
+        [Header("Collider standing")]
+        public float standingColliderPosition;
+        public float standingColliderHight;
+        [Header("Collider standing")]
+        public float crouchedColliderPosition;
+        public float crouchedColliderHight;
 
         [Header("Drag")]
         public float idleDrag;

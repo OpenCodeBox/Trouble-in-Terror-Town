@@ -14,6 +14,12 @@ namespace TTTSC.Player.Character.Controller
         public event Action<bool, float> SprintInputEvent, CrouchInputEvent, JumpInputEvent;
 
 
+        #region SpectatorControls
+        public event Action<bool, float> SpectatorSpeedUpInputEvent, SpectatorSlowDownEvent, FlyUpInputEvent, FlyDownInputEvent;
+        bool _spectatorSpeedUpIsHeld, _spectatorSlowDownIsHeld, _flyUpIsHeld, _flyDownIsHeld;
+        float _spectatorSpeedUpStageValue, _spectatorSlowDownStageValue, _flyUpStageValue, _flyDownStageValue;
+        #endregion
+
         public PlayerInputSender playerInputEvents;
 
         private void OnEnable()
@@ -21,22 +27,72 @@ namespace TTTSC.Player.Character.Controller
             playerInputEvents = new PlayerInputSender();
 
             playerInputEvents.Enable();
-            playerInputEvents.Controlls.Walk.performed += WalkInputReceiver;
-            playerInputEvents.Controlls.LookX.performed += LookXInputReceiver;
-            playerInputEvents.Controlls.LookY.performed += LookYInputReceiver;
-            playerInputEvents.Controlls.Sprint.performed += SprintInputReceiver;
-            playerInputEvents.Controlls.Jump.performed += JumpInputReceiver;
-            playerInputEvents.Controlls.Crouch.performed += CrouchInputReceiver;
+
+            //
+            #region GlobalControls
+
+            playerInputEvents.GlobalControls.LookX.performed += LookXInputReceiver;
+            playerInputEvents.GlobalControls.LookY.performed += LookYInputReceiver;
+            playerInputEvents.GlobalControls.Move.performed += WalkInputReceiver;
+
+            #endregion
+
+
+            //
+            #region AliveControls
+
+
+            playerInputEvents.AliveControls.Sprint.performed += SprintInputReceiver;
+            playerInputEvents.AliveControls.Jump.performed += JumpInputReceiver;
+            playerInputEvents.AliveControls.Crouch.performed += CrouchInputReceiver;
+
+            #endregion
+
+
+            //
+            #region SpectatorControls
+
+            playerInputEvents.SpectatorControls.SpeedUp.performed += SpectatorSpeedUp;
+            playerInputEvents.SpectatorControls.SpeedDown.performed += SpectatorSlowDown;
+            playerInputEvents.SpectatorControls.FlyUp.performed += SpectatorFlyUp;
+            playerInputEvents.SpectatorControls.FlyDown.performed += SpectatorFlyDown;
+
+            #endregion
         }
 
         private void OnDisable()
         {
             playerInputEvents.Disable();
-            playerInputEvents.Controlls.Walk.performed -= WalkInputReceiver;
-            playerInputEvents.Controlls.LookX.performed -= LookXInputReceiver;
-            playerInputEvents.Controlls.Sprint.performed -= SprintInputReceiver;
-            playerInputEvents.Controlls.Jump.performed -= JumpInputReceiver;
-            playerInputEvents.Controlls.Crouch.performed -= CrouchInputReceiver;
+
+            //
+            #region GlobalControls
+
+            playerInputEvents.GlobalControls.LookX.performed -= LookXInputReceiver;
+            playerInputEvents.GlobalControls.LookY.performed -= LookYInputReceiver;
+            playerInputEvents.GlobalControls.Move.performed -= WalkInputReceiver;
+
+            #endregion
+
+
+            //
+            #region AliveControls
+
+            playerInputEvents.AliveControls.Sprint.performed -= SprintInputReceiver;
+            playerInputEvents.AliveControls.Jump.performed -= JumpInputReceiver;
+            playerInputEvents.AliveControls.Crouch.performed -= CrouchInputReceiver;
+
+            #endregion
+
+
+            //
+            #region SpectatorControls
+
+            playerInputEvents.SpectatorControls.SpeedUp.performed -= SpectatorSpeedUp;
+            playerInputEvents.SpectatorControls.SpeedDown.performed -= SpectatorSlowDown;
+            playerInputEvents.SpectatorControls.FlyUp.performed -= SpectatorFlyUp;
+            playerInputEvents.SpectatorControls.FlyDown.performed -= SpectatorFlyDown;
+
+            #endregion
         }
 
         #region FloatBool function
@@ -126,24 +182,58 @@ namespace TTTSC.Player.Character.Controller
 
         private void FixedUpdate()
         {
-            playerInputEvents.Controlls.Sprint.started += ctx => _sprintStageValue = 1;
-            playerInputEvents.Controlls.Sprint.performed += ctx => _sprintStageValue = 2;
-            playerInputEvents.Controlls.Sprint.canceled += ctx => _sprintStageValue = 0;
+            #region AliveControls
+
+            playerInputEvents.AliveControls.Sprint.started += ctx => _sprintStageValue = 1;
+            playerInputEvents.AliveControls.Sprint.performed += ctx => _sprintStageValue = 2;
+            playerInputEvents.AliveControls.Sprint.canceled += ctx => _sprintStageValue = 0;
 
             SprintInputEvent?.Invoke(_sprintIsHeld, _sprintStageValue);
 
-            playerInputEvents.Controlls.Crouch.started += ctx => _crouchStageValue = 1;
-            playerInputEvents.Controlls.Crouch.performed += ctx => _crouchStageValue = 2;
-            playerInputEvents.Controlls.Crouch.canceled += ctx => _crouchStageValue = 0;
+            playerInputEvents.AliveControls.Crouch.started += ctx => _crouchStageValue = 1;
+            playerInputEvents.AliveControls.Crouch.performed += ctx => _crouchStageValue = 2;
+            playerInputEvents.AliveControls.Crouch.canceled += ctx => _crouchStageValue = 0;
 
             CrouchInputEvent?.Invoke(_crouchIsHeld, _crouchStageValue);
 
-            playerInputEvents.Controlls.Jump.started += ctx => _jumpStageValue = 1;
-            playerInputEvents.Controlls.Jump.performed += ctx => _jumpStageValue = 2;
-            playerInputEvents.Controlls.Jump.canceled += ctx => _jumpStageValue = 0;
+            playerInputEvents.AliveControls.Jump.started += ctx => _jumpStageValue = 1;
+            playerInputEvents.AliveControls.Jump.performed += ctx => _jumpStageValue = 2;
+            playerInputEvents.AliveControls.Jump.canceled += ctx => _jumpStageValue = 0;
             
             JumpInputEvent?.Invoke(_jumpIsHeld, _jumpStageValue);
+            #endregion
+
+
+            //
+            #region SpectatorControls
+
+            playerInputEvents.SpectatorControls.SpeedUp.started += ctx => _spectatorSpeedUpStageValue = 1;
+            playerInputEvents.SpectatorControls.SpeedUp.performed += ctx => _spectatorSpeedUpStageValue = 2;
+            playerInputEvents.SpectatorControls.SpeedUp.canceled += ctx => _spectatorSpeedUpStageValue = 0;
+
+            SpectatorSpeedUpInputEvent?.Invoke(_spectatorSpeedUpIsHeld, _spectatorSpeedUpStageValue);
+
+            playerInputEvents.SpectatorControls.SpeedDown.started += ctx => _spectatorSlowDownStageValue = 1;
+            playerInputEvents.SpectatorControls.SpeedDown.performed += ctx => _spectatorSlowDownStageValue = 2;
+            playerInputEvents.SpectatorControls.SpeedDown.canceled += ctx => _spectatorSlowDownStageValue = 0;
+
+            SpectatorSlowDownEvent?.Invoke(_spectatorSlowDownIsHeld, _spectatorSlowDownStageValue);
+
+            playerInputEvents.SpectatorControls.FlyUp.started += ctx => _flyUpStageValue = 1;
+            playerInputEvents.SpectatorControls.FlyUp.performed += ctx => _flyUpStageValue = 2;
+            playerInputEvents.SpectatorControls.FlyUp.canceled += ctx => _flyUpStageValue = 0;
+
+            FlyUpInputEvent?.Invoke(_flyUpIsHeld, _flyUpStageValue);
+
+            playerInputEvents.SpectatorControls.FlyDown.started += ctx => _flyDownStageValue = 1;
+            playerInputEvents.SpectatorControls.FlyDown.performed += ctx => _flyDownStageValue = 2;
+            playerInputEvents.SpectatorControls.FlyDown.canceled += ctx => _flyDownStageValue = 0;
+
+            FlyDownInputEvent?.Invoke(_flyDownIsHeld, _flyDownStageValue);
+            #endregion
         }
+
+        #region GlobalControls
 
         private void LookXInputReceiver(InputAction.CallbackContext ctx)
         {
@@ -158,7 +248,7 @@ namespace TTTSC.Player.Character.Controller
             float value = ctx.ReadValue<float>();
 
             _lookY = value;
-            
+
             Look(FloatBool(value, "!=", 0));
         }
 
@@ -172,19 +262,22 @@ namespace TTTSC.Player.Character.Controller
         private void WalkInputReceiver(InputAction.CallbackContext ctx)
         {
             var value = ctx.ReadValue<Vector2>();
-            
+
             bool performing = !(value == new Vector2(0, 0));
 
             MoveInputEvent?.Invoke(value, performing);
         }
+
+        #endregion
+
+
+        #region AliveControls
 
         private void SprintInputReceiver(InputAction.CallbackContext ctx)
         {
             float value = ctx.ReadValue<float>();
 
             _sprintIsHeld = FloatBool(value, "==", 1);
-
-
 
         }
 
@@ -205,5 +298,39 @@ namespace TTTSC.Player.Character.Controller
             _jumpIsHeld = FloatBool(value, "==", 1);
 
         }
+
+        #endregion
+
+        #region SpectatorControls
+
+        private void SpectatorSpeedUp(InputAction.CallbackContext ctx)
+        {
+            float value = ctx.ReadValue<float>();
+
+            _spectatorSpeedUpIsHeld = FloatBool(value, "==", 1);
+        }
+
+        private void SpectatorSlowDown(InputAction.CallbackContext ctx)
+        {
+            float value = ctx.ReadValue<float>();
+
+            _spectatorSlowDownIsHeld = FloatBool(value, "==", 1);
+        }
+
+        private void SpectatorFlyUp(InputAction.CallbackContext ctx)
+        {
+            float value = ctx.ReadValue<float>();
+
+            _flyUpIsHeld = FloatBool(value, "==", 1);
+        }
+
+        private void SpectatorFlyDown(InputAction.CallbackContext ctx)
+        {
+            float value = ctx.ReadValue<float>();
+
+            _flyDownIsHeld = FloatBool(value, "==", 1);
+        }
+
+        #endregion
     }
 }

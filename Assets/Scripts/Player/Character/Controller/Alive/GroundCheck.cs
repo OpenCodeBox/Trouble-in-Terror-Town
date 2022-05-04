@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace TTTSC.Player.Character.Controller
 {
-    public class CharacterHover : MonoBehaviour
+    public class GroundCheck : MonoBehaviour
     {
         [SerializeField]
         float _capsuleCastHight, _capsuleCastRadius;
@@ -12,7 +12,7 @@ namespace TTTSC.Player.Character.Controller
         Vector3 _downVector;
 
         [SerializeField]
-        private CharacterReffrenceHub characterReffrenceHub;
+        private AliveReffrenceHub _aliveReffrenceHub;
         private CharacterMovementConfig _characterMovementConfig;
         private CharacterStateMachine _characterStateMachine;
         [SerializeField]
@@ -33,7 +33,9 @@ namespace TTTSC.Player.Character.Controller
 
         private void OnDrawGizmos()
         {
-            _characterMovementConfig = characterReffrenceHub.characterMovementConfig;
+
+            _characterMovementConfig = _aliveReffrenceHub.characterMovementConfig;
+
 
             switch (_rayStatus)
             {
@@ -58,8 +60,8 @@ namespace TTTSC.Player.Character.Controller
 
         private void Awake()
         {
-            _characterMovementConfig = characterReffrenceHub.characterMovementConfig;
-            _characterStateMachine = characterReffrenceHub.characterStateMachine;
+            _characterMovementConfig = _aliveReffrenceHub.characterMovementConfig;
+            _characterStateMachine = _aliveReffrenceHub.characterStateMachine;
         }
 
         // Update is called once per frame
@@ -67,7 +69,7 @@ namespace TTTSC.Player.Character.Controller
         {
             _downVector = transform.TransformDirection(Vector3.down);
 
-            Vector3 characterVelocity = _characterMovementConfig.characterRigidbody.velocity;
+            Vector3 characterVelocity = GetComponentInParent<Rigidbody>().velocity;
 
             _rayStatus = Physics.CapsuleCast(new Vector3(_groundCheckOrigin.position.x, (_capsuleCastHight / 2) + _groundCheckOrigin.position.y, _groundCheckOrigin.position.z),
                 new Vector3(_groundCheckOrigin.position.x, (-_capsuleCastHight / 2) + _groundCheckOrigin.position.y, _groundCheckOrigin.position.z), _capsuleCastRadius,_downVector, out _hoverRayHit, _characterMovementConfig.groundCheckLength, _layerMask);
