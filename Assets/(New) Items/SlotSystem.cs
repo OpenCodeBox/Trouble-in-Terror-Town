@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 using TMPro;
 
 // !! ========= NOTE ========= !!
@@ -29,6 +30,9 @@ using TMPro;
  * -> UpdateIndex_Slotsobject
  * -> Update_Slotsobject
  * 
+ * -> Spawn_Object
+ * -> RemoveCurrent_Object
+ * 
  * -> setupSlot
  * 
  * -> Debug_Slot
@@ -50,12 +54,21 @@ public class SlotSystem : MonoBehaviour
         }
     }
 
+    [Header("Pooling Setting")]
+
+    [Space(10)]
+    [Header("Spawn Setting")]
+    public GameObject parentObject; // Used to spawn object to specific parent
+    [Space(10)]
+    [Header("Slot Setting")]
     public List<Item> slots;
     public List<Item> slots_special;
     public List<GameObject> slots_object;
     private List<slotInfo> slotInfoArray = new List<slotInfo>(); // Used to check compatibility with items that are being stored
     public int selectedSlot;
     public int selectedSlot_special;
+
+    private GameObject currentGameObject = null; // Used to check stored current GameObject to destroy it later when not used or switching item
 
     // TMP
     public Item tmp_Item; // Tmp
@@ -285,7 +298,7 @@ public class SlotSystem : MonoBehaviour
         }
     }
 
-    // update[Name] will update all index text (might come more soon)
+    // update_[Name] will update all index text (might come more soon)
     void Update_Slotsobject()
     {
         try
@@ -298,6 +311,45 @@ public class SlotSystem : MonoBehaviour
         } catch
         {
             Debug.LogError("Couldn't update! Possible problem INSIDE for loop are 'index', 'GetChild' or 'GetComponent'");
+        }
+    }
+
+    // Spawn_[Name] will spawn object to the game world to a specific parentObject
+    bool SpawnIndex_Object(int index)
+    {
+        try
+        {
+            if (GetIndex_ItemObject(index) != null)
+            {
+                currentGameObject = Instantiate(GetIndex_ItemObject(index)) as GameObject; // Pooling System on unity is way too confusing.. Ill research about it more later.
+                currentGameObject.transform.SetParent(parentObject.transform, false);
+                return true;
+            }
+            return false;
+        }
+        catch
+        {
+            Debug.LogError("Prefab could not be instantiated");
+            return false;
+        }
+    }
+
+    // removeCurrent_[Name] will remove current object if spawned any
+    bool RemoveCurrent_Object()
+    {
+        try
+        {
+            if (currentGameObject != null)
+            {
+                Destroy(currentGameObject);
+                return true;
+            }
+            return false;
+        }
+        catch
+        {
+            Debug.LogError("currentGameObject could not be destroyed");
+            return false;
         }
     }
 
@@ -387,6 +439,9 @@ public class SlotSystem : MonoBehaviour
         setupSlot(); // Must setup before using any other functions
         Set_Slot(tmp_Item);
         Update_Slotsobject();
+
+        SpawnIndex_Object(0);
+        //RemoveCurrent_Object();
     }
 
     // Update is called once per frame

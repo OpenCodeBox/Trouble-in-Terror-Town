@@ -16,4 +16,5 @@ MonoBehaviour:
   ItemID: 1
   ItemType: 0
   SlotType: 0
-  ItemObject: {fileID: 0}
+  ItemObject: {fileID: 2683428033455470680, guid: e4709fc7d46b73549bd76044d6991645,
+    type: 3}
