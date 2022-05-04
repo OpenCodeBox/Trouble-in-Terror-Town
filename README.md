@@ -5,4 +5,9 @@ Trouble in Terror Town: Source Crossed (TTTSC) is a standalone community-made re
 check [wiki](https://github.com/Open-Code-Box/Trouble-in-Terrorist-Town-Source-Crossed/wiki) for information on usage of code n stuff.
 you can also join project's [discord server](https://discord.gg/X2R49swy5n) if you need help with anything.
 
+
+## Dependencies
+
+Unity 2021.3.1f1
+
 ### This readme is still being worked on
