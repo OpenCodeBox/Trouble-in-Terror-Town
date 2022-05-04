@@ -15,9 +15,10 @@ namespace TTTSC.Player.Character.Controller
 
 
         #region SpectatorControls
+        public event Action<Vector2, bool> SpectatorScrollSpeedInputEvent;
         public event Action<bool, float> SpectatorSpeedUpInputEvent, SpectatorSlowDownEvent, FlyUpInputEvent, FlyDownInputEvent;
         bool _spectatorSpeedUpIsHeld, _spectatorSlowDownIsHeld, _flyUpIsHeld, _flyDownIsHeld;
-        float _spectatorSpeedUpStageValue, _spectatorSlowDownStageValue, _flyUpStageValue, _flyDownStageValue;
+        float _spectatorFlyFastStageValue, _spectatorFlySlowStageValue, _flyUpStageValue, _flyDownStageValue;
         #endregion
 
         public PlayerInputSender playerInputEvents;
@@ -52,8 +53,8 @@ namespace TTTSC.Player.Character.Controller
             //
             #region SpectatorControls
 
-            playerInputEvents.SpectatorControls.SpeedUp.performed += SpectatorSpeedUp;
-            playerInputEvents.SpectatorControls.SpeedDown.performed += SpectatorSlowDown;
+            playerInputEvents.SpectatorControls.FlyFast.performed += SpectatorFlyFast;
+            playerInputEvents.SpectatorControls.FlySlow.performed += SpectatorFlySlow;
             playerInputEvents.SpectatorControls.FlyUp.performed += SpectatorFlyUp;
             playerInputEvents.SpectatorControls.FlyDown.performed += SpectatorFlyDown;
 
@@ -87,8 +88,8 @@ namespace TTTSC.Player.Character.Controller
             //
             #region SpectatorControls
 
-            playerInputEvents.SpectatorControls.SpeedUp.performed -= SpectatorSpeedUp;
-            playerInputEvents.SpectatorControls.SpeedDown.performed -= SpectatorSlowDown;
+            playerInputEvents.SpectatorControls.FlyFast.performed -= SpectatorFlyFast;
+            playerInputEvents.SpectatorControls.FlySlow.performed -= SpectatorFlySlow;
             playerInputEvents.SpectatorControls.FlyUp.performed -= SpectatorFlyUp;
             playerInputEvents.SpectatorControls.FlyDown.performed -= SpectatorFlyDown;
 
@@ -182,6 +183,7 @@ namespace TTTSC.Player.Character.Controller
 
         private void FixedUpdate()
         {
+            //
             #region AliveControls
 
             playerInputEvents.AliveControls.Sprint.started += ctx => _sprintStageValue = 1;
@@ -207,17 +209,17 @@ namespace TTTSC.Player.Character.Controller
             //
             #region SpectatorControls
 
-            playerInputEvents.SpectatorControls.SpeedUp.started += ctx => _spectatorSpeedUpStageValue = 1;
-            playerInputEvents.SpectatorControls.SpeedUp.performed += ctx => _spectatorSpeedUpStageValue = 2;
-            playerInputEvents.SpectatorControls.SpeedUp.canceled += ctx => _spectatorSpeedUpStageValue = 0;
+            playerInputEvents.SpectatorControls.FlyFast.started += ctx => _spectatorFlyFastStageValue = 1;
+            playerInputEvents.SpectatorControls.FlyFast.performed += ctx => _spectatorFlyFastStageValue = 2;
+            playerInputEvents.SpectatorControls.FlyFast.canceled += ctx => _spectatorFlyFastStageValue = 0;
 
-            SpectatorSpeedUpInputEvent?.Invoke(_spectatorSpeedUpIsHeld, _spectatorSpeedUpStageValue);
+            SpectatorSpeedUpInputEvent?.Invoke(_spectatorSpeedUpIsHeld, _spectatorFlyFastStageValue);
 
-            playerInputEvents.SpectatorControls.SpeedDown.started += ctx => _spectatorSlowDownStageValue = 1;
-            playerInputEvents.SpectatorControls.SpeedDown.performed += ctx => _spectatorSlowDownStageValue = 2;
-            playerInputEvents.SpectatorControls.SpeedDown.canceled += ctx => _spectatorSlowDownStageValue = 0;
+            playerInputEvents.SpectatorControls.FlySlow.started += ctx => _spectatorFlySlowStageValue = 1;
+            playerInputEvents.SpectatorControls.FlySlow.performed += ctx => _spectatorFlySlowStageValue = 2;
+            playerInputEvents.SpectatorControls.FlySlow.canceled += ctx => _spectatorFlySlowStageValue = 0;
 
-            SpectatorSlowDownEvent?.Invoke(_spectatorSlowDownIsHeld, _spectatorSlowDownStageValue);
+            SpectatorSlowDownEvent?.Invoke(_spectatorSlowDownIsHeld, _spectatorFlySlowStageValue);
 
             playerInputEvents.SpectatorControls.FlyUp.started += ctx => _flyUpStageValue = 1;
             playerInputEvents.SpectatorControls.FlyUp.performed += ctx => _flyUpStageValue = 2;
@@ -303,14 +305,14 @@ namespace TTTSC.Player.Character.Controller
 
         #region SpectatorControls
 
-        private void SpectatorSpeedUp(InputAction.CallbackContext ctx)
+        private void SpectatorFlyFast(InputAction.CallbackContext ctx)
         {
             float value = ctx.ReadValue<float>();
 
             _spectatorSpeedUpIsHeld = FloatBool(value, "==", 1);
         }
 
-        private void SpectatorSlowDown(InputAction.CallbackContext ctx)
+        private void SpectatorFlySlow(InputAction.CallbackContext ctx)
         {
             float value = ctx.ReadValue<float>();
 

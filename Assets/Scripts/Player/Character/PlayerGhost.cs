@@ -6,14 +6,16 @@ namespace TTTSC.Player.Character
 {
     public class PlayerGhost : MonoBehaviour
     {
-        public PlayerGhostReffrenceHub _playerGhostReffrenceHub;
-        public int shoopCoins;
+        [SerializeField]
+        private PlayerGhostReffrenceHub playerGhostReffrenceHub;
+        [SerializeField]
+        public PlayerInfo.PlayerInfoData playerInfoData;
 
 
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
-
+            playerInfoData = ScriptableObject.CreateInstance<PlayerInfo.PlayerInfoData>();
         }
 
         // Update is called once per frame

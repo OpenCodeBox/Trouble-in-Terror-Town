@@ -2,40 +2,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TTTSC.Player
+namespace TTTSC.Player.Character
 {
     public class PlayerStateEnforcer : MonoBehaviour
     {
-        private PlayerStateMachine _playerStateMachine;
+        [SerializeField]
+        private PlayerGhostReffrenceHub _playerGhostReffrenceHub;
+        [SerializeField]
+        private PlayerInfo.PlayerInfoData _playerInfoData;
+        private PlayerGhost _playerGhost;
+        private Rigidbody _characterRigidbody;
         [SerializeField][Tooltip("assign the 'alive' prefab here")]
-        private GameObject alivePlayerPrefab;
-        private GameObject spectatorPlayerPrefab;
+        private GameObject _aliveBodyPrefab;
+        [SerializeField][Tooltip("assign the 'dead' prefab here")]
+        private GameObject _spectatorBodyPrefab;
 
+        private GameObject _aliveBody;
+        private GameObject _spectatorBody;
+
+        private void Start()
+        {
+            _playerGhost = _playerGhostReffrenceHub.playerGhost;
+            _playerInfoData = _playerGhost.playerInfoData;
+            _characterRigidbody = _playerGhostReffrenceHub.characterRigidbody;
+            CheckPlayerState();
+        }
 
         void CheckPlayerState()
         {
-            switch (_playerStateMachine.currentPlayerPlayState)
+            switch (_playerInfoData.currentPlayerPlayState)
             {
                 case PlayerStateMachine.playerPlayStates.Spectator:
-                    //add logic for turning player in to a spectator
+                    SpawnSpectatorPlayerBody();
+                    _characterRigidbody.useGravity = false;
                     break;
                 case PlayerStateMachine.playerPlayStates.Alive:
-                    //add logic for making player "alive"
-                    //basicaly just reset player's stats
+                    SpawnAlivePlayerBody();
+                    _characterRigidbody.useGravity = true;
                     break;
             }
         }
 
         void CheckPlayerClass()
         {
-            switch (_playerStateMachine.currentPlayerClass)
+            switch (_playerInfoData.currentPlayerClass)
             {
-                case PlayerStateMachine.playerClass.Spectator:
-                    //this class is used when player excedes the max AFK time before being turned in to a spectator
-                    //or when player just wants to spactate the game.
-                    break;
                 case PlayerStateMachine.playerClass.Preparing:
-                    //this is the default class for everyone right before the round starts
+                    //this is the default class for everyone before the round starts
                     break;
                 case PlayerStateMachine.playerClass.Innocent:
                     //TODO
@@ -49,14 +62,33 @@ namespace TTTSC.Player
             }
         }
 
-        void SpawnPlayerBody()
+        void SpawnAlivePlayerBody()
         {
+            _playerInfoData.helth = 100;
+            if (_spectatorBody != null)
+            {
+                Destroy(_spectatorBody);
+            }
+            _aliveBody = Instantiate(_aliveBodyPrefab, transform.position, transform.rotation);
 
+            _aliveBody.transform.SetParent(transform);
         }
 
-        void SpawnPlayerRagdoll()
+        void SpawnSpectatorPlayerBody()
         {
+            if (_aliveBody != null)
+            {
+                Destroy(_aliveBody);
+                SpawnDeadBody();
+            }
 
+            _spectatorBody = Instantiate(_spectatorBodyPrefab, transform.position, transform.rotation);
+            _spectatorBody.transform.SetParent(transform);
+        }
+
+        void SpawnDeadBody()
+        {
+            //Add logic for spawning ragdoll and the dead body
         }
     }
 }

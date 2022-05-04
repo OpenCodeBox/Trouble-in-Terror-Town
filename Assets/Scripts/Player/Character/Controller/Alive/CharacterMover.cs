@@ -34,7 +34,7 @@ namespace TTTSC.Player.Character.Controller.Alive
         private bool _performingMoveInput;
         private Vector3 _moveDirection;
 
-        private void Awake()
+        private void Start()
         {
             _playerGhostReffrenceHub = GetComponentInParent<PlayerGhostReffrenceHub>();
             _characterRigidbody = _playerGhostReffrenceHub.characterRigidbody;
@@ -48,11 +48,20 @@ namespace TTTSC.Player.Character.Controller.Alive
 
             _playerInputReceiver.MoveInputEvent += MoveInput;
             _playerInputReceiver.JumpInputEvent += JumpInput;
+
+            _characterRigidbody = _playerGhostReffrenceHub.characterRigidbody;
         }
 
-        void Start()
+        private void OnDisable()
         {
-            _characterRigidbody = _playerGhostReffrenceHub.characterRigidbody;
+            _playerInputReceiver.MoveInputEvent -= MoveInput;
+            _playerInputReceiver.JumpInputEvent -= JumpInput;
+        }
+
+        private void OnDestroy()
+        {
+            _playerInputReceiver.MoveInputEvent -= MoveInput;
+            _playerInputReceiver.JumpInputEvent -= JumpInput;
         }
 
         #region Input event listeners

@@ -22,8 +22,7 @@ namespace TTTSC.Player.Character.Controller
         private bool _performingMoveInput;
         private Vector2 _moveDirection;
 
-        // Awake is called before the first frame
-        void Awake()
+        private void Start()
         {
             _playerGhostReffrenceHub = GetComponentInParent<PlayerGhostReffrenceHub>();
             _cameraTransform = _playerGhostReffrenceHub.cameraTransform;
@@ -32,7 +31,20 @@ namespace TTTSC.Player.Character.Controller
             _playerInputReceiver.MoveInputEvent += MoveInput;
             _playerInputReceiver.FlyUpInputEvent += FlyUpInput;
             _playerInputReceiver.FlyDownInputEvent += FlyDownInput;
+        }
 
+        private void OnDisable()
+        {
+            _playerInputReceiver.MoveInputEvent -= MoveInput;
+            _playerInputReceiver.FlyUpInputEvent -= FlyUpInput;
+            _playerInputReceiver.FlyDownInputEvent -= FlyDownInput;
+        }
+
+        private void OnDestroy()
+        {
+            _playerInputReceiver.MoveInputEvent -= MoveInput;
+            _playerInputReceiver.FlyUpInputEvent -= FlyUpInput;
+            _playerInputReceiver.FlyDownInputEvent -= FlyDownInput;
         }
 
         // Update is called once per frame

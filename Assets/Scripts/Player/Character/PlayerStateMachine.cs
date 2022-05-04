@@ -2,28 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace TTTSC.Player
+namespace TTTSC.Player.Character
 {
     public class PlayerStateMachine : MonoBehaviour
     {
         public enum playerPlayStates
         {
-            Spectator,
-            Alive
+            Alive,
+            Spectator
         };
-
-        public playerPlayStates currentPlayerPlayState;
 
         public enum playerClass
         {
-            Spectator,
             Preparing,
             Innocent,
             Detective,
             Traitor
         };
 
-        public playerClass currentPlayerClass;
     }
 }
 

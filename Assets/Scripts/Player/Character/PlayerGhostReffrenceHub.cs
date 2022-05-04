@@ -8,6 +8,7 @@ namespace TTTSC.Player.Character
         public Rigidbody characterRigidbody;
         public Transform cameraTransform;
         [Header("----------Scripts-----------")]
+        public PlayerGhost playerGhost;
         public PlayerStateEnforcer playerStateEnforcrer;
         public PlayerStateMachine playerStateMachine;
         public Controller.PlayerInputReceiver playerInputReceiver;

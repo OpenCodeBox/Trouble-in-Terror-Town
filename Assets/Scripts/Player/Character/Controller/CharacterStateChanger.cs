@@ -13,15 +13,11 @@ namespace TTTSC.Player.Character.Controller
 
         private bool _walkIsPerforming, _crouchIsHeld, _sprintIsPerforming;
 
-        private void Awake()
+        private void Start()
         {
             _playerGhostReffrenceHub = GetComponentInParent<PlayerGhostReffrenceHub>();
             _playerInputReceiver = _playerGhostReffrenceHub.playerInputReceiver;
             _characterStateMachine = GetComponent<CharacterStateMachine>();
-        }
-
-        private void Start()
-        {
             _playerInputReceiver.MoveInputEvent += Walk;
             _playerInputReceiver.CrouchInputEvent += Crouch;
             _playerInputReceiver.SprintInputEvent += Sprint;

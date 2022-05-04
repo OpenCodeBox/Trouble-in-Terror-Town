@@ -471,7 +471,7 @@ namespace TTTSC.Player.Character.Controller
             ""id"": ""2cc562f6-1b6c-4033-b783-2a481ab11dec"",
             ""actions"": [
                 {
-                    ""name"": ""SpeedDown"",
+                    ""name"": ""FlyFast"",
                     ""type"": ""PassThrough"",
                     ""id"": ""1e150f46-f771-4738-92fc-2fc13b6697b7"",
                     ""expectedControlType"": ""Button"",
@@ -480,7 +480,7 @@ namespace TTTSC.Player.Character.Controller
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""SpeedUp"",
+                    ""name"": ""FlySlow"",
                     ""type"": ""PassThrough"",
                     ""id"": ""4ec09521-b697-424d-b042-16c4c355012c"",
                     ""expectedControlType"": ""Button"",
@@ -505,6 +505,15 @@ namespace TTTSC.Player.Character.Controller
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ScrollSpeedControlw"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""c6404499-255c-4521-abfa-5fb829afd1e0"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -515,7 +524,7 @@ namespace TTTSC.Player.Character.Controller
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardAndMouse"",
-                    ""action"": ""SpeedDown"",
+                    ""action"": ""FlyFast"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -526,7 +535,7 @@ namespace TTTSC.Player.Character.Controller
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""SpeedDown"",
+                    ""action"": ""FlyFast"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -537,7 +546,7 @@ namespace TTTSC.Player.Character.Controller
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KeyboardAndMouse"",
-                    ""action"": ""SpeedUp"",
+                    ""action"": ""FlySlow"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -548,7 +557,7 @@ namespace TTTSC.Player.Character.Controller
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""SpeedUp"",
+                    ""action"": ""FlySlow"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -571,6 +580,17 @@ namespace TTTSC.Player.Character.Controller
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""FlyDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cd457b70-a6c0-4b36-ae23-a86735c06bee"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ScrollSpeedControlw"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -631,10 +651,11 @@ namespace TTTSC.Player.Character.Controller
             m_AliveControls_DropAmmo = m_AliveControls.FindAction("DropAmmo", throwIfNotFound: true);
             // SpectatorControls
             m_SpectatorControls = asset.FindActionMap("SpectatorControls", throwIfNotFound: true);
-            m_SpectatorControls_SpeedDown = m_SpectatorControls.FindAction("SpeedDown", throwIfNotFound: true);
-            m_SpectatorControls_SpeedUp = m_SpectatorControls.FindAction("SpeedUp", throwIfNotFound: true);
+            m_SpectatorControls_FlyFast = m_SpectatorControls.FindAction("FlyFast", throwIfNotFound: true);
+            m_SpectatorControls_FlySlow = m_SpectatorControls.FindAction("FlySlow", throwIfNotFound: true);
             m_SpectatorControls_FlyUp = m_SpectatorControls.FindAction("FlyUp", throwIfNotFound: true);
             m_SpectatorControls_FlyDown = m_SpectatorControls.FindAction("FlyDown", throwIfNotFound: true);
+            m_SpectatorControls_ScrollSpeedControlw = m_SpectatorControls.FindAction("ScrollSpeedControlw", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -848,18 +869,20 @@ namespace TTTSC.Player.Character.Controller
         // SpectatorControls
         private readonly InputActionMap m_SpectatorControls;
         private ISpectatorControlsActions m_SpectatorControlsActionsCallbackInterface;
-        private readonly InputAction m_SpectatorControls_SpeedDown;
-        private readonly InputAction m_SpectatorControls_SpeedUp;
+        private readonly InputAction m_SpectatorControls_FlyFast;
+        private readonly InputAction m_SpectatorControls_FlySlow;
         private readonly InputAction m_SpectatorControls_FlyUp;
         private readonly InputAction m_SpectatorControls_FlyDown;
+        private readonly InputAction m_SpectatorControls_ScrollSpeedControlw;
         public struct SpectatorControlsActions
         {
             private @PlayerInputSender m_Wrapper;
             public SpectatorControlsActions(@PlayerInputSender wrapper) { m_Wrapper = wrapper; }
-            public InputAction @SpeedDown => m_Wrapper.m_SpectatorControls_SpeedDown;
-            public InputAction @SpeedUp => m_Wrapper.m_SpectatorControls_SpeedUp;
+            public InputAction @FlyFast => m_Wrapper.m_SpectatorControls_FlyFast;
+            public InputAction @FlySlow => m_Wrapper.m_SpectatorControls_FlySlow;
             public InputAction @FlyUp => m_Wrapper.m_SpectatorControls_FlyUp;
             public InputAction @FlyDown => m_Wrapper.m_SpectatorControls_FlyDown;
+            public InputAction @ScrollSpeedControlw => m_Wrapper.m_SpectatorControls_ScrollSpeedControlw;
             public InputActionMap Get() { return m_Wrapper.m_SpectatorControls; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -869,34 +892,40 @@ namespace TTTSC.Player.Character.Controller
             {
                 if (m_Wrapper.m_SpectatorControlsActionsCallbackInterface != null)
                 {
-                    @SpeedDown.started -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnSpeedDown;
-                    @SpeedDown.performed -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnSpeedDown;
-                    @SpeedDown.canceled -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnSpeedDown;
-                    @SpeedUp.started -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnSpeedUp;
-                    @SpeedUp.performed -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnSpeedUp;
-                    @SpeedUp.canceled -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnSpeedUp;
+                    @FlyFast.started -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnFlyFast;
+                    @FlyFast.performed -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnFlyFast;
+                    @FlyFast.canceled -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnFlyFast;
+                    @FlySlow.started -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnFlySlow;
+                    @FlySlow.performed -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnFlySlow;
+                    @FlySlow.canceled -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnFlySlow;
                     @FlyUp.started -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnFlyUp;
                     @FlyUp.performed -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnFlyUp;
                     @FlyUp.canceled -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnFlyUp;
                     @FlyDown.started -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnFlyDown;
                     @FlyDown.performed -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnFlyDown;
                     @FlyDown.canceled -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnFlyDown;
+                    @ScrollSpeedControlw.started -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnScrollSpeedControlw;
+                    @ScrollSpeedControlw.performed -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnScrollSpeedControlw;
+                    @ScrollSpeedControlw.canceled -= m_Wrapper.m_SpectatorControlsActionsCallbackInterface.OnScrollSpeedControlw;
                 }
                 m_Wrapper.m_SpectatorControlsActionsCallbackInterface = instance;
                 if (instance != null)
                 {
-                    @SpeedDown.started += instance.OnSpeedDown;
-                    @SpeedDown.performed += instance.OnSpeedDown;
-                    @SpeedDown.canceled += instance.OnSpeedDown;
-                    @SpeedUp.started += instance.OnSpeedUp;
-                    @SpeedUp.performed += instance.OnSpeedUp;
-                    @SpeedUp.canceled += instance.OnSpeedUp;
+                    @FlyFast.started += instance.OnFlyFast;
+                    @FlyFast.performed += instance.OnFlyFast;
+                    @FlyFast.canceled += instance.OnFlyFast;
+                    @FlySlow.started += instance.OnFlySlow;
+                    @FlySlow.performed += instance.OnFlySlow;
+                    @FlySlow.canceled += instance.OnFlySlow;
                     @FlyUp.started += instance.OnFlyUp;
                     @FlyUp.performed += instance.OnFlyUp;
                     @FlyUp.canceled += instance.OnFlyUp;
                     @FlyDown.started += instance.OnFlyDown;
                     @FlyDown.performed += instance.OnFlyDown;
                     @FlyDown.canceled += instance.OnFlyDown;
+                    @ScrollSpeedControlw.started += instance.OnScrollSpeedControlw;
+                    @ScrollSpeedControlw.performed += instance.OnScrollSpeedControlw;
+                    @ScrollSpeedControlw.canceled += instance.OnScrollSpeedControlw;
                 }
             }
         }
@@ -940,10 +969,11 @@ namespace TTTSC.Player.Character.Controller
         }
         public interface ISpectatorControlsActions
         {
-            void OnSpeedDown(InputAction.CallbackContext context);
-            void OnSpeedUp(InputAction.CallbackContext context);
+            void OnFlyFast(InputAction.CallbackContext context);
+            void OnFlySlow(InputAction.CallbackContext context);
             void OnFlyUp(InputAction.CallbackContext context);
             void OnFlyDown(InputAction.CallbackContext context);
+            void OnScrollSpeedControlw(InputAction.CallbackContext context);
         }
     }
 }

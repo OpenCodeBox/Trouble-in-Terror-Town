@@ -447,7 +447,7 @@
             "id": "2cc562f6-1b6c-4033-b783-2a481ab11dec",
             "actions": [
                 {
-                    "name": "SpeedDown",
+                    "name": "FlyFast",
                     "type": "PassThrough",
                     "id": "1e150f46-f771-4738-92fc-2fc13b6697b7",
                     "expectedControlType": "Button",
@@ -456,7 +456,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "SpeedUp",
+                    "name": "FlySlow",
                     "type": "PassThrough",
                     "id": "4ec09521-b697-424d-b042-16c4c355012c",
                     "expectedControlType": "Button",
@@ -481,6 +481,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ScrollSpeedControlw",
+                    "type": "PassThrough",
+                    "id": "c6404499-255c-4521-abfa-5fb829afd1e0",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -491,7 +500,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardAndMouse",
-                    "action": "SpeedDown",
+                    "action": "FlyFast",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -502,7 +511,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "SpeedDown",
+                    "action": "FlyFast",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -513,7 +522,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardAndMouse",
-                    "action": "SpeedUp",
+                    "action": "FlySlow",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -524,7 +533,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "SpeedUp",
+                    "action": "FlySlow",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -547,6 +556,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "FlyDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cd457b70-a6c0-4b36-ae23-a86735c06bee",
+                    "path": "<Mouse>/scroll",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ScrollSpeedControlw",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

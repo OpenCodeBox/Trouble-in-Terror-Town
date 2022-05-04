@@ -1,10 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using MyBox;
-using UnityEditor;
-using UnityEditorInternal;
 using System.Threading.Tasks;
 
 [Serializable]
