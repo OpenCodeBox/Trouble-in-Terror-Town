@@ -1,0 +1,14 @@
+{
+	"role":
+	[
+	{
+		"roleID" : 1,
+		"roleName": "Innocent",
+		"roleHexColor": "00ff00",
+		"randomlyAssignable": true,
+		"roleTeamID": 0,
+		"canUseShop": false,
+		"EnemyTeamIds": [1]
+	}
+	]
+}

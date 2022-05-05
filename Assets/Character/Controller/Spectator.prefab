@@ -48,7 +48,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ef574f735723bd449e49daddc163edd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cameraTransform: {fileID: 0}
   _spectatorMoveConfig: {fileID: 1135382073684329172}
   _characterStateMachine: {fileID: 1135382073684329179}
 --- !u!114 &1135382073684329172
@@ -463,6 +462,7 @@ GameObject:
   - component: {fileID: 1135382075031318065}
   - component: {fileID: 1135382075031318064}
   - component: {fileID: 1135382075031318071}
+  - component: {fileID: 2714724217782752003}
   m_Layer: 5
   m_Name: UI
   m_TagString: Untagged
@@ -552,6 +552,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &2714724217782752003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1135382075031318069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23e48b5dbb603ca4ba22df0d5ca93e39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _timer: {fileID: 1135382074586652813}
 --- !u!1 &1135382075172996869
 GameObject:
   m_ObjectHideFlags: 0

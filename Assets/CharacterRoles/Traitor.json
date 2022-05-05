@@ -1,0 +1,14 @@
+{
+	"role":
+	[
+	{
+		"roleID" : 3,
+		"roleName": "Traitor",
+		"roleHexColor": "ff0000",
+		"randomlyAssignable": true,
+		"roleTeamID": 2,
+		"canUseShop": true,
+		"EnemyTeamIds": [1]
+	}
+	]
+}

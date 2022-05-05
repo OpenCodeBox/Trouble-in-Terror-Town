@@ -5,15 +5,12 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "TTTSC/Player/Character/Role")]
 public class RoleData : ScriptableObject
 {
+    public int roleID;
     public string roleName;
-    public int roleId;
-    public Color roleColor;
+    public string roleHexColor;
+    public bool randomlyAssignable;
+    public int roleTeamID;
+    public bool canUseShop;
+    public int[] EnemyTeamIds;
 
-    public enum RoleTeam
-    {
-        Innocent,
-        Traitor
-    }
-
-    public RoleTeam roleTeam;
 }

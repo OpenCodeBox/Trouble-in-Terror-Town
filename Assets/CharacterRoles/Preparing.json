@@ -1,0 +1,14 @@
+{
+	"role":
+	[
+	{
+		"roleID" : 0,
+		"roleName": "Preparing",
+		"roleHexColor": "707070",
+		"randomlyAssignable": false,
+		"roleTeamID": 0,
+		"canUseShop": false,
+		"EnemyTeamIds": []
+	}
+	]
+}

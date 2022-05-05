@@ -9,8 +9,7 @@ namespace TTTSC.Player.Character
         [SerializeField]
         private PlayerGhostReffrenceHub _playerGhostReffrenceHub;
         [SerializeField]
-        private PlayerInfo.PlayerInfoData _playerInfoData;
-        private PlayerGhost _playerGhost;
+        private PlayerCharacterInfo.PlayerCharacterInfoData _playerInfoData;
         private Rigidbody _characterRigidbody;
         [SerializeField][Tooltip("assign the 'alive' prefab here")]
         private GameObject _aliveBodyPrefab;
@@ -22,68 +21,61 @@ namespace TTTSC.Player.Character
 
         private void Start()
         {
-            _playerGhost = _playerGhostReffrenceHub.playerGhost;
-            _playerInfoData = _playerGhost.playerInfoData;
+            _playerInfoData = _playerGhostReffrenceHub.playerInfoData;
             _characterRigidbody = _playerGhostReffrenceHub.characterRigidbody;
             CheckPlayerState();
         }
 
-        void CheckPlayerState()
+        private void Update()
+        {
+            CheckPlayerState();
+        }
+
+        public void CheckPlayerState()
         {
             switch (_playerInfoData.currentPlayerPlayState)
             {
-                case PlayerStateMachine.playerPlayStates.Spectator:
+                case PlayerCharacterInfo.PlayerCharacterInfoData.playerPlayStates.Spectator:
                     SpawnSpectatorPlayerBody();
                     _characterRigidbody.useGravity = false;
                     break;
-                case PlayerStateMachine.playerPlayStates.Alive:
+                case PlayerCharacterInfo.PlayerCharacterInfoData.playerPlayStates.Alive:
                     SpawnAlivePlayerBody();
                     _characterRigidbody.useGravity = true;
                     break;
             }
         }
 
-        void CheckPlayerClass()
-        {
-            switch (_playerInfoData.currentPlayerClass)
-            {
-                case PlayerStateMachine.playerClass.Preparing:
-                    //this is the default class for everyone before the round starts
-                    break;
-                case PlayerStateMachine.playerClass.Innocent:
-                    //TODO
-                    break;
-                case PlayerStateMachine.playerClass.Detective:
-                    //TODO
-                    break;
-                case PlayerStateMachine.playerClass.Traitor:
-                    //TODO
-                    break;
-            }
-        }
-
-        void SpawnAlivePlayerBody()
+        public void SpawnAlivePlayerBody()
         {
             _playerInfoData.helth = 100;
             if (_spectatorBody != null)
             {
                 Destroy(_spectatorBody);
+                Debug.Log("destroyed spectator body");
             }
-            _aliveBody = Instantiate(_aliveBodyPrefab, transform.position, transform.rotation);
 
-            _aliveBody.transform.SetParent(transform);
+            if (_aliveBody == null)
+            {
+                _aliveBody = Instantiate(_aliveBodyPrefab, transform.position, transform.rotation);
+                _aliveBody.transform.SetParent(transform);
+            }
         }
 
-        void SpawnSpectatorPlayerBody()
+        public void SpawnSpectatorPlayerBody()
         {
             if (_aliveBody != null)
             {
                 Destroy(_aliveBody);
+                Debug.Log("destroyed alive body");
                 SpawnDeadBody();
             }
 
-            _spectatorBody = Instantiate(_spectatorBodyPrefab, transform.position, transform.rotation);
-            _spectatorBody.transform.SetParent(transform);
+            if (_spectatorBody == null)
+            {
+                _spectatorBody = Instantiate(_spectatorBodyPrefab, transform.position, transform.rotation);
+                _spectatorBody.transform.SetParent(transform);
+            }
         }
 
         void SpawnDeadBody()

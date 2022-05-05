@@ -1,0 +1,14 @@
+{
+	"role":
+	[
+	{
+		"roleID" : 2,
+		"roleName": "Detective",
+		"roleHexColor": "0000ff",
+		"randomlyAssignable": true,
+		"roleTeamID": 1,
+		"canUseShop": true,
+		"EnemyTeamIds": [2]
+	}
+	]
+}
