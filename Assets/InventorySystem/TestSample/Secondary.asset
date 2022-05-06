@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5616ea767049f3f4abf778200fbf66cd, type: 3}
-  m_Name: Melee
+  m_Name: Secondary
   m_EditorClassIdentifier: 
-  ItemName: KNIFE
-  ItemID: 1
+  ItemName: Deagle
+  ItemID: 2
   ItemType: 0
-  SlotType: 0
-  ItemObject: {fileID: 2683428033455470680, guid: e4709fc7d46b73549bd76044d6991645,
-    type: 3}
+  SlotType: 1
+  UsedSpecialSlotNumber: 0
+  ItemObject: {fileID: 0}
