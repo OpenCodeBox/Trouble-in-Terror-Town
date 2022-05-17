@@ -57,11 +57,11 @@ namespace TTTSC.Player.Character
 
             if (_aliveBody == null)
             {
-                _aliveBody = Instantiate(_aliveBodyPrefab, transform.position, transform.rotation);
-                _aliveBody.transform.SetParent(transform);
+                _aliveBody = Instantiate(_aliveBodyPrefab, transform.position, transform.rotation, transform);
+                //_aliveBody.transform.SetParent(transform);
             }
         }
-
+        
         public void SpawnSpectatorPlayerBody()
         {
             if (_aliveBody != null)

@@ -15,14 +15,13 @@ namespace TTTSC.Player.Character.Controller
         public TargetRotationModes hotizontalRotationMode;
         public TargetRotationModes verticalRotationMode;
         public Transform cameraTransform;
-        public Transform[] horizontalRotationTargets, verticalRotationTargets, rotateWithCameraTargets;
+        public List<Transform> horizontalRotationTargets, verticalRotationTargets, rotateWithCameraTargets;
         CinemachinePOV _cinemachinePOV;
         protected void Awake()
         {
             _virtualCamera = GetComponent<CinemachineVirtualCamera>();
             _cinemachinePOV = _virtualCamera.GetCinemachineComponent<CinemachinePOV>();
             _playerInputReceiver = FindObjectOfType<PlayerInputReceiver>();
-            _playerInputReceiver.LookInputEvent += LookInput;
         }
 
         public enum TargetRotationModes
@@ -31,14 +30,6 @@ namespace TTTSC.Player.Character.Controller
             rotateFollowTarget,
             rotateLookTarget,
             rotateSpecificTargets
-        }
-
-        private void LookInput(Vector2 lookInput, bool performing)
-        {
-
-            
-
-
         }
 
         private void LateUpdate()
