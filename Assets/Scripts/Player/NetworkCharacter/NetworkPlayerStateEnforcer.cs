@@ -1,19 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TTTSC.Player.Character;
+using TTTSC.Player.Character.PlayerCharacterInfo;
+using Mirror;
 
-namespace TTTSC.Player.Character
+namespace TTTSC.Player.NetworkedCharacter
 {
-    public class PlayerStateEnforcer : MonoBehaviour
+    public class NetworkPlayerStateEnforcer : NetworkBehaviour
     {
         [SerializeField]
         private PlayerGhostReffrenceHub _playerGhostReffrenceHub;
         [SerializeField]
-        private PlayerCharacterInfo.PlayerCharacterInfoData _playerInfoData;
+        private PlayerCharacterInfoData _playerInfoData;
         private Rigidbody _characterRigidbody;
-        [SerializeField][Tooltip("assign the 'alive' prefab here")]
+        [SerializeField]
+        [Tooltip("assign the 'alive' prefab here")]
         private GameObject _aliveBodyPrefab;
-        [SerializeField][Tooltip("assign the 'dead' prefab here")]
+        [SerializeField]
+        [Tooltip("assign the 'dead' prefab here")]
         private GameObject _spectatorBodyPrefab;
 
         private GameObject _aliveBody;
@@ -35,17 +40,18 @@ namespace TTTSC.Player.Character
         {
             switch (_playerInfoData.currentPlayerPlayState)
             {
-                case PlayerCharacterInfo.PlayerCharacterInfoData.playerPlayStates.Spectator:
+                case PlayerCharacterInfoData.playerPlayStates.Spectator:
                     SpawnSpectatorPlayerBody();
                     _characterRigidbody.useGravity = false;
                     break;
-                case PlayerCharacterInfo.PlayerCharacterInfoData.playerPlayStates.Alive:
+                case PlayerCharacterInfoData.playerPlayStates.Alive:
                     SpawnAlivePlayerBody();
                     _characterRigidbody.useGravity = true;
                     break;
             }
         }
 
+        [ClientRpc]
         public void SpawnAlivePlayerBody()
         {
             _playerInfoData.helth = 100;
@@ -60,7 +66,8 @@ namespace TTTSC.Player.Character
                 _aliveBody = Instantiate(_aliveBodyPrefab, transform.position, transform.rotation, transform);
             }
         }
-        
+
+        [ClientRpc]
         public void SpawnSpectatorPlayerBody()
         {
             if (_aliveBody != null)
@@ -72,7 +79,11 @@ namespace TTTSC.Player.Character
 
             if (_spectatorBody == null)
             {
-                _spectatorBody = Instantiate(_spectatorBodyPrefab, transform.position, transform.rotation, transform);
+                if (isServer)
+                {
+                    _spectatorBody = Instantiate(_spectatorBodyPrefab, transform.position, transform.rotation, transform);
+                    
+                }
             }
         }
 

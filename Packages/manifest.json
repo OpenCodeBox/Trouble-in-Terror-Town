@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "com.adrenak.airpeer": "1.2.0",
+    "com.adrenak.unimic": "1.0.3",
+    "com.adrenak.univoice": "1.1.4",
     "com.domybest.mybox": "https://github.com/Deadcows/MyBox.git",
     "com.unity.cinemachine": "2.8.4",
     "com.unity.ide.rider": "3.0.14",
@@ -13,6 +16,8 @@
     "com.unity.ugui": "1.0.0",
     "com.unity.visualeffectgraph": "12.1.6",
     "com.veriorpies.parrelsync": "https://github.com/VeriorPies/ParrelSync.git?path=/ParrelSync",
+    "com.wooshii.hierarchydecorator": "0.8.6",
+    "dev.chsxf.autoscene": "1.2.2",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
@@ -43,12 +48,7 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0",
-    "com.adrenak.airpeer": "1.2.0",
-    "com.adrenak.unimic": "1.0.3",
-    "com.adrenak.univoice": "1.1.4",
-    "com.wooshii.hierarchydecorator": "0.8.6",
-    "dev.chsxf.autoscene": "1.2.2"
+    "com.unity.modules.xr": "1.0.0"
   },
   "scopedRegistries": [
     {
@@ -58,8 +58,10 @@
         "com.adrenak.airpeer",
         "com.adrenak.unimic",
         "com.adrenak.univoice",
+        "com.charcolle.unityeditormemo",
         "com.openupm",
         "com.wooshii.hierarchydecorator",
+        "com.yasirkula.ingamedebugconsole",
         "dev.chsxf.autoscene"
       ]
     }

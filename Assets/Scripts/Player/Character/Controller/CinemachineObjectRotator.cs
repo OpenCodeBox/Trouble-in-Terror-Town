@@ -50,9 +50,12 @@ namespace TTTSC.Player.Character.Controller
                             _virtualCamera.LookAt.rotation = Quaternion.Euler(_virtualCamera.LookAt.up * rotationX);
                             break;
                         case TargetRotationModes.rotateSpecificTargets:
-                            foreach (Transform target in horizontalRotationTargets)
+                            if (horizontalRotationTargets.Count > 0)
                             {
-                                target.rotation = Quaternion.Euler(transform.up * rotationX);
+                                for (int i = 0; i < horizontalRotationTargets.Count; i++)
+                                {
+                                    horizontalRotationTargets[i].rotation = Quaternion.Euler(horizontalRotationTargets[i].up * rotationX);
+                                }
                             }
                             break;
                     }

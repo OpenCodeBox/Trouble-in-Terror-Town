@@ -23,7 +23,7 @@ public class PresanceManager : MonoBehaviour
     }
 
 
-    public  void SetPresence(GameEventDataSet dataSet)
+    public void SetPresence(GameEventDataSet dataSet)
     {
         Debug.Log("attempting to set presence");
         CheckDataSet(dataSet);

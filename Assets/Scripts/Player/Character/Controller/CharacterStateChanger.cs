@@ -28,12 +28,12 @@ namespace TTTSC.Player.Character.Controller
             _walkIsPerforming = performing;
         }
 
-        private void Crouch(bool performing, float stageValue)
+        private void Crouch(bool performing)
         {
             _crouchIsHeld = performing;
         }
 
-        private void Sprint(bool held, float stageValue)
+        private void Sprint(bool held)
         {
             _sprintIsPerforming = held;
         }

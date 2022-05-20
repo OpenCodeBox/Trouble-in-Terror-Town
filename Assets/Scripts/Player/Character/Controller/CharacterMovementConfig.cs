@@ -17,9 +17,11 @@ namespace TTTSC.Player.Character.Controller
         [Header("Collider standing")]
         public float standingColliderPosition;
         public float standingColliderHight;
+        public float standingColliderRadius;
         [Header("Collider standing")]
         public float crouchedColliderPosition;
         public float crouchedColliderHight;
+        public float crouchedColliderRadius;
 
         [Header("Drag")]
         public float idleDrag;

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Steamworks;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Steam_Login : MonoBehaviour
 {
@@ -56,7 +57,10 @@ public class Steam_Login : MonoBehaviour
         userInfo.profilePicture = test.texture;
 
 
-        StartCoroutine("CreateEOSManager");
+        SceneManager.LoadScene("MainMenu");
+
+
+        //StartCoroutine("CreateEOSManager");
     }
 
     public Texture2D AvatarToTexture2D(Steamworks.Data.Image image)

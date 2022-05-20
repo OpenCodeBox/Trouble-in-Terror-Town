@@ -9,7 +9,7 @@ public class MainMenuManager : MonoBehaviour
 
     private void OnEnable()
     {
-        gameEventManager = FindObjectOfType<GameEventManager>();
+        gameEventManager = GetComponent<GameEventManager>();
     }
 
     // Start is called before the first frame update

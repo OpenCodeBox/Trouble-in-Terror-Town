@@ -73,10 +73,9 @@ namespace TTTSC.Player.Character.Controller.Alive
         }
 
         //Remember to change jumpPower from 0 to some other number that preferably is in the positives and not negatives
-        private void JumpInput(bool performed, float stageValue)
+        private void JumpInput(bool performed)
         {
             _jumpInputHeld = performed;
-            _jumpStageValue = stageValue;
         }
 
         #endregion

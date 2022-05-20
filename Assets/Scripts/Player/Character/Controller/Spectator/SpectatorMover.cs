@@ -25,26 +25,26 @@ namespace TTTSC.Player.Character.Controller
         private void Start()
         {
             _playerGhostReffrenceHub = GetComponentInParent<PlayerGhostReffrenceHub>();
-            _cameraTransform = _playerGhostReffrenceHub.cameraTransform;
+            _cameraTransform = Camera.main.transform;
             _characterRigidbody = _playerGhostReffrenceHub.characterRigidbody;
             _playerInputReceiver = _playerGhostReffrenceHub.playerInputReceiver;
             _playerInputReceiver.MoveInputEvent += MoveInput;
-            _playerInputReceiver.FlyUpInputEvent += FlyUpInput;
-            _playerInputReceiver.FlyDownInputEvent += FlyDownInput;
+            _playerInputReceiver.SpectatorFlyUpInputEvent += FlyUpInput;
+            _playerInputReceiver.SpectatorFlyDownInputEvent += FlyDownInput;
         }
 
         private void OnDisable()
         {
             _playerInputReceiver.MoveInputEvent -= MoveInput;
-            _playerInputReceiver.FlyUpInputEvent -= FlyUpInput;
-            _playerInputReceiver.FlyDownInputEvent -= FlyDownInput;
+            _playerInputReceiver.SpectatorFlyUpInputEvent -= FlyUpInput;
+            _playerInputReceiver.SpectatorFlyDownInputEvent -= FlyDownInput;
         }
 
         private void OnDestroy()
         {
             _playerInputReceiver.MoveInputEvent -= MoveInput;
-            _playerInputReceiver.FlyUpInputEvent -= FlyUpInput;
-            _playerInputReceiver.FlyDownInputEvent -= FlyDownInput;
+            _playerInputReceiver.SpectatorFlyUpInputEvent -= FlyUpInput;
+            _playerInputReceiver.SpectatorFlyDownInputEvent -= FlyDownInput;
         }
 
         // Update is called once per frame
@@ -72,12 +72,12 @@ namespace TTTSC.Player.Character.Controller
             _moveDirection = new Vector2(moveDirection.x, moveDirection.y);
         }
 
-        private void FlyUpInput(bool performing, float stageValue)
+        private void FlyUpInput(bool performing)
         {
             _performingFlyUp = performing;
         }
 
-        private void FlyDownInput(bool performing, float stageValue)
+        private void FlyDownInput(bool performing)
         {
             _performingFlyDown = performing;
         }

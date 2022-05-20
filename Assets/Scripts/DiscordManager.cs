@@ -11,7 +11,7 @@ public class DiscordManager : MonoBehaviour
     ActivityManager activityManager;
     DateTimeOffset dateTimeOffset;
 
-    private void OnEnable()
+    private void Awake()
     {
         DontDestroyOnLoad(this);
         dateTimeOffset = DateTime.UtcNow;
@@ -38,8 +38,42 @@ public class DiscordManager : MonoBehaviour
 
     public void SetPresence(string state, string gamemode, string map, string playersInGame, string maxPlayersInGame)
     {
+        ClearPresence();
+
         switch (state)
         {
+            default:
+                var activityBroken = new Discord.Activity
+                {
+                    Details = "Someone broke something",
+                    Assets =
+                    {
+                        LargeImage = "tttsc_icon",
+#if UNITY_EDITOR
+                        SmallImage = "tttsc_icon_unity",
+                        SmallText = "ah, so someone is playing in the editor",
+#endif
+                    },
+                    Timestamps =
+                    {
+                        Start = dateTimeOffset.ToUnixTimeSeconds()
+                    }
+                };
+
+                activityManager.UpdateActivity(activityBroken, (res) =>
+                {
+                    switch (res)
+                    {
+                        case Result.Ok:
+                            Debug.Log("discord activity has been updated");
+                            break;
+                        default:
+                            Debug.LogError("discord activity failed to update");
+                            break;
+                    }
+                });
+
+                break;
             case "presence_InMainMenu":
                 var activityInMainMenu = new Discord.Activity
                 {
@@ -155,13 +189,13 @@ public class DiscordManager : MonoBehaviour
 
 
     }
-
-    // Start is called before the first frame update
-    void Start()
+    
+    void OnApplicationQuit()
     {
-        
+        ClearPresence();
+        discord.Dispose();
     }
-
+    
     // Update is called once per frame
     void Update()
     {

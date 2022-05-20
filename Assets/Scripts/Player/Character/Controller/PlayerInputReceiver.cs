@@ -1,40 +1,44 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Mirror;
 
 namespace TTTSC.Player.Character.Controller
 {
-    public class PlayerInputReceiver : MonoBehaviour
+    public class PlayerInputReceiver : NetworkBehaviour
     {
+        private NetworkIdentity _networkIdentity;
+
         private float _lookX, _lookY;
 
         bool _sprintIsHeld, _crouchIsHeld, _jumpIsHeld;
-        float _sprintStageValue, _crouchStageValue, _jumpStageValue;
         public event Action<Vector2, bool> MoveInputEvent, LookInputEvent;
-        public event Action<bool, float> SprintInputEvent, CrouchInputEvent, JumpInputEvent;
+        public event Action<bool> SprintInputEvent, CrouchInputEvent, JumpInputEvent;
 
 
         #region SpectatorControls
         public event Action<Vector2, bool> SpectatorScrollSpeedInputEvent;
-        public event Action<bool, float> SpectatorSpeedUpInputEvent, SpectatorSlowDownEvent, FlyUpInputEvent, FlyDownInputEvent;
+        public event Action<bool> SpectatorFlyFastInputEvent, SpectatorFlySlowInputEvent, SpectatorFlyUpInputEvent, SpectatorFlyDownInputEvent;
+        
         bool _spectatorSpeedUpIsHeld, _spectatorSlowDownIsHeld, _flyUpIsHeld, _flyDownIsHeld;
-        float _spectatorFlyFastStageValue, _spectatorFlySlowStageValue, _flyUpStageValue, _flyDownStageValue;
         #endregion
 
         public PlayerInputSender playerInputEvents;
 
-        private void OnEnable()
+        private void Awake()
         {
             playerInputEvents = new PlayerInputSender();
 
             playerInputEvents.Enable();
 
+            _networkIdentity = GetComponent<NetworkIdentity>();
+
             //
             #region GlobalControls
 
             playerInputEvents.GlobalControls.LookX.performed += LookXInputReceiver;
-            playerInputEvents.GlobalControls.LookY.performed += LookYInputReceiver;
-            playerInputEvents.GlobalControls.Move.performed += WalkInputReceiver;
+            playerInputEvents.GlobalControls.LookY.started += LookYInputReceiver;
+            playerInputEvents.GlobalControls.Move.started += WalkInputReceiver;
 
             #endregion
 
@@ -42,9 +46,8 @@ namespace TTTSC.Player.Character.Controller
             //
             #region AliveControls
 
-
-            playerInputEvents.AliveControls.Sprint.performed += SprintInputReceiver;
-            playerInputEvents.AliveControls.Jump.performed += JumpInputReceiver;
+            playerInputEvents.AliveControls.Sprint.started += SprintInputReceiver;
+            playerInputEvents.AliveControls.Jump.started += JumpInputReceiver;
             playerInputEvents.AliveControls.Crouch.performed += CrouchInputReceiver;
 
             #endregion
@@ -53,10 +56,10 @@ namespace TTTSC.Player.Character.Controller
             //
             #region SpectatorControls
 
-            playerInputEvents.SpectatorControls.FlyFast.performed += SpectatorFlyFast;
-            playerInputEvents.SpectatorControls.FlySlow.performed += SpectatorFlySlow;
-            playerInputEvents.SpectatorControls.FlyUp.performed += SpectatorFlyUp;
-            playerInputEvents.SpectatorControls.FlyDown.performed += SpectatorFlyDown;
+            playerInputEvents.SpectatorControls.FlyFast.started += SpectatorFlyFastInputReceiver;
+            playerInputEvents.SpectatorControls.FlySlow.started += SpectatorFlySlowInputReceiver;
+            playerInputEvents.SpectatorControls.FlyUp.started += SpectatorFlyUpInputReceiver;
+            playerInputEvents.SpectatorControls.FlyDown.performed += SpectatorFlyDownInputReceiver;
 
             #endregion
         }
@@ -69,8 +72,8 @@ namespace TTTSC.Player.Character.Controller
             #region GlobalControls
 
             playerInputEvents.GlobalControls.LookX.performed -= LookXInputReceiver;
-            playerInputEvents.GlobalControls.LookY.performed -= LookYInputReceiver;
-            playerInputEvents.GlobalControls.Move.performed -= WalkInputReceiver;
+            playerInputEvents.GlobalControls.LookY.started -= LookYInputReceiver;
+            playerInputEvents.GlobalControls.Move.started -= WalkInputReceiver;
 
             #endregion
 
@@ -78,8 +81,9 @@ namespace TTTSC.Player.Character.Controller
             //
             #region AliveControls
 
-            playerInputEvents.AliveControls.Sprint.performed -= SprintInputReceiver;
-            playerInputEvents.AliveControls.Jump.performed -= JumpInputReceiver;
+
+            playerInputEvents.AliveControls.Sprint.started -= SprintInputReceiver;
+            playerInputEvents.AliveControls.Jump.started -= JumpInputReceiver;
             playerInputEvents.AliveControls.Crouch.performed -= CrouchInputReceiver;
 
             #endregion
@@ -88,10 +92,10 @@ namespace TTTSC.Player.Character.Controller
             //
             #region SpectatorControls
 
-            playerInputEvents.SpectatorControls.FlyFast.performed -= SpectatorFlyFast;
-            playerInputEvents.SpectatorControls.FlySlow.performed -= SpectatorFlySlow;
-            playerInputEvents.SpectatorControls.FlyUp.performed -= SpectatorFlyUp;
-            playerInputEvents.SpectatorControls.FlyDown.performed -= SpectatorFlyDown;
+            playerInputEvents.SpectatorControls.FlyFast.started -= SpectatorFlyFastInputReceiver;
+            playerInputEvents.SpectatorControls.FlySlow.started -= SpectatorFlySlowInputReceiver;;
+            playerInputEvents.SpectatorControls.FlyUp.started -= SpectatorFlyUpInputReceiver;
+            playerInputEvents.SpectatorControls.FlyDown.performed -= SpectatorFlyDownInputReceiver;
 
             #endregion
         }
@@ -181,158 +185,208 @@ namespace TTTSC.Player.Character.Controller
         }
         #endregion
 
-        private void FixedUpdate()
-        {
-            //
-            #region AliveControls
-
-            playerInputEvents.AliveControls.Sprint.started += ctx => _sprintStageValue = 1;
-            playerInputEvents.AliveControls.Sprint.performed += ctx => _sprintStageValue = 2;
-            playerInputEvents.AliveControls.Sprint.canceled += ctx => _sprintStageValue = 0;
-
-            SprintInputEvent?.Invoke(_sprintIsHeld, _sprintStageValue);
-
-            playerInputEvents.AliveControls.Crouch.started += ctx => _crouchStageValue = 1;
-            playerInputEvents.AliveControls.Crouch.performed += ctx => _crouchStageValue = 2;
-            playerInputEvents.AliveControls.Crouch.canceled += ctx => _crouchStageValue = 0;
-
-            CrouchInputEvent?.Invoke(_crouchIsHeld, _crouchStageValue);
-
-            playerInputEvents.AliveControls.Jump.started += ctx => _jumpStageValue = 1;
-            playerInputEvents.AliveControls.Jump.performed += ctx => _jumpStageValue = 2;
-            playerInputEvents.AliveControls.Jump.canceled += ctx => _jumpStageValue = 0;
-            
-            JumpInputEvent?.Invoke(_jumpIsHeld, _jumpStageValue);
-            #endregion
-
-
-            //
-            #region SpectatorControls
-
-            playerInputEvents.SpectatorControls.FlyFast.started += ctx => _spectatorFlyFastStageValue = 1;
-            playerInputEvents.SpectatorControls.FlyFast.performed += ctx => _spectatorFlyFastStageValue = 2;
-            playerInputEvents.SpectatorControls.FlyFast.canceled += ctx => _spectatorFlyFastStageValue = 0;
-
-            SpectatorSpeedUpInputEvent?.Invoke(_spectatorSpeedUpIsHeld, _spectatorFlyFastStageValue);
-
-            playerInputEvents.SpectatorControls.FlySlow.started += ctx => _spectatorFlySlowStageValue = 1;
-            playerInputEvents.SpectatorControls.FlySlow.performed += ctx => _spectatorFlySlowStageValue = 2;
-            playerInputEvents.SpectatorControls.FlySlow.canceled += ctx => _spectatorFlySlowStageValue = 0;
-
-            SpectatorSlowDownEvent?.Invoke(_spectatorSlowDownIsHeld, _spectatorFlySlowStageValue);
-
-            playerInputEvents.SpectatorControls.FlyUp.started += ctx => _flyUpStageValue = 1;
-            playerInputEvents.SpectatorControls.FlyUp.performed += ctx => _flyUpStageValue = 2;
-            playerInputEvents.SpectatorControls.FlyUp.canceled += ctx => _flyUpStageValue = 0;
-
-            FlyUpInputEvent?.Invoke(_flyUpIsHeld, _flyUpStageValue);
-
-            playerInputEvents.SpectatorControls.FlyDown.started += ctx => _flyDownStageValue = 1;
-            playerInputEvents.SpectatorControls.FlyDown.performed += ctx => _flyDownStageValue = 2;
-            playerInputEvents.SpectatorControls.FlyDown.canceled += ctx => _flyDownStageValue = 0;
-
-            FlyDownInputEvent?.Invoke(_flyDownIsHeld, _flyDownStageValue);
-            #endregion
-        }
-
         #region GlobalControls
 
+        
+        [Client]
         private void LookXInputReceiver(InputAction.CallbackContext ctx)
         {
             var value = ctx.ReadValue<float>();
 
             _lookX = value;
-            Look(FloatBool(value, "!=", 0));
+            LookPerformed(FloatBool(value, "!=", 0));
         }
 
+
+        [Client]
         private void LookYInputReceiver(InputAction.CallbackContext ctx)
         {
             float value = ctx.ReadValue<float>();
 
             _lookY = value;
 
-            Look(FloatBool(value, "!=", 0));
+            LookPerformed(FloatBool(value, "!=", 0));
         }
 
-        private void Look(bool performing)
+        [Client]
+        private void LookPerformed(bool performing)
         {
-            var look = new Vector2(_lookX, _lookY);
+            if (isLocalPlayer)
+            {
+                var look = new Vector2(_lookX, _lookY);
 
-            LookInputEvent?.Invoke(look, performing);
+                LookInputEvent?.Invoke(look, performing);
+            }
         }
 
+        [Client]
         private void WalkInputReceiver(InputAction.CallbackContext ctx)
         {
             var value = ctx.ReadValue<Vector2>();
 
             bool performing = !(value == new Vector2(0, 0));
 
-            MoveInputEvent?.Invoke(value, performing);
+            CmdWalkInputReceiver(value, performing);
         }
 
+        [Command]
+        private void CmdWalkInputReceiver(Vector2 value, bool performing)
+        {
+            MoveInputEvent?.Invoke(value, performing);
+        }
+        
         #endregion
 
 
         #region AliveControls
 
+        #region SprintInputReciver
+        [Client]
         private void SprintInputReceiver(InputAction.CallbackContext ctx)
         {
             float value = ctx.ReadValue<float>();
 
-            _sprintIsHeld = FloatBool(value, "==", 1);
+            if (isLocalPlayer)
+            {
+                CmdSprintInput(FloatBool(value, "==", 1));
+            }
 
         }
+        
+        [Command]
+        private void CmdSprintInput(bool performed)
+        {
+            SprintInputEvent?.Invoke(performed);
+        }
 
+        #endregion
+
+        #region CrouchInputReciver
+
+        [Client]
         private void CrouchInputReceiver(InputAction.CallbackContext ctx)
         {
             float value = ctx.ReadValue<float>();
 
-            _crouchIsHeld = FloatBool(value, "==", 1);
+            Debug.Log("CrouchInputReceiver: " + value);
 
-
-
+            if (isLocalPlayer)
+            {
+                Debug.Log("Sending crouch input to server");
+                CmdCrouchInput(FloatBool(value, "==", 1));
+            }
         }
 
+        [Command]
+        private void CmdCrouchInput(bool performed)
+        {
+            Debug.Log("Crouch input received on server from" + _networkIdentity.netId);
+            CrouchInputEvent?.Invoke(performed);
+        }
+
+        #endregion
+
+        #region JumpInputReciver
+        
+        [Client]
         private void JumpInputReceiver(InputAction.CallbackContext ctx)
         {
             float value = ctx.ReadValue<float>();
 
             _jumpIsHeld = FloatBool(value, "==", 1);
 
+            if (isLocalPlayer)
+            {
+                CmdJumpInput(FloatBool(value, "==", 1));
+            }
         }
+
+        [Command]
+        private void CmdJumpInput(bool performed)
+        {
+            JumpInputEvent?.Invoke(performed);
+        }
+        
+
+        #endregion
 
         #endregion
 
         #region SpectatorControls
 
-        private void SpectatorFlyFast(InputAction.CallbackContext ctx)
+
+        #region SpectatorSpeedUp
+        [Client]
+        private void SpectatorFlyFastInputReceiver(InputAction.CallbackContext ctx)
         {
             float value = ctx.ReadValue<float>();
 
-            _spectatorSpeedUpIsHeld = FloatBool(value, "==", 1);
+            if (isLocalPlayer)
+            {
+                CmdSpectatorFlyFast(FloatBool(value, "==", 1));
+            }
+        }
+        
+        [Command]
+        private void CmdSpectatorFlyFast(bool performed)
+        {
+            SpectatorFlyFastInputEvent?.Invoke(performed);
         }
 
-        private void SpectatorFlySlow(InputAction.CallbackContext ctx)
+        #endregion
+
+
+        #region SpectatorFlySlow
+        private void SpectatorFlySlowInputReceiver(InputAction.CallbackContext ctx)
         {
             float value = ctx.ReadValue<float>();
 
-            _spectatorSlowDownIsHeld = FloatBool(value, "==", 1);
+            CmdSpectatorFlySlow(FloatBool(value, "==", 1));
         }
 
-        private void SpectatorFlyUp(InputAction.CallbackContext ctx)
+        [Command]
+        private void CmdSpectatorFlySlow(bool performed)
+        {
+            SpectatorFlySlowInputEvent?.Invoke(performed);
+        }
+
+        #endregion
+
+
+        #region SpectatorFlyUp
+
+        [Client]
+        private void SpectatorFlyUpInputReceiver(InputAction.CallbackContext ctx)
         {
             float value = ctx.ReadValue<float>();
 
-            _flyUpIsHeld = FloatBool(value, "==", 1);
+            CmdSpectatorFlyUp(FloatBool(value, "==", 1));
         }
 
-        private void SpectatorFlyDown(InputAction.CallbackContext ctx)
+        [Command]
+        private void CmdSpectatorFlyUp(bool performed)
+        {
+            SpectatorFlyUpInputEvent?.Invoke(performed);
+        }
+
+        #endregion
+
+        
+        #region SpectatorFlyDown
+        private void SpectatorFlyDownInputReceiver(InputAction.CallbackContext ctx)
         {
             float value = ctx.ReadValue<float>();
 
-            _flyDownIsHeld = FloatBool(value, "==", 1);
+            CmdSpectatorFlyDown(FloatBool(value, "==", 1));
         }
 
+        private void CmdSpectatorFlyDown(bool performed)
+        {
+            SpectatorFlyDownInputEvent?.Invoke(performed);
+        }
+
+        #endregion
+        
         #endregion
     }
 }

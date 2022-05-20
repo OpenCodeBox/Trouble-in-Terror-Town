@@ -10,7 +10,7 @@ namespace TTTSC.Player.Character.Controller
         private PlayerGhostReffrenceHub _aliveReffrenceHub;
 
         [SerializeField]
-        private CapsuleCollider _characterEnviormentCollider;
+        private Transform _characterEnviormentCollider;
         private CharacterMovementConfig _characterMovementConfig;
         private GroundCheck _characterHover;
         private CharacterStateMachine _characterStateMachine;
@@ -43,16 +43,16 @@ namespace TTTSC.Player.Character.Controller
         {
             _characterHover.currentHoverHight = _characterMovementConfig.crouchHeight;
 
-            _characterEnviormentCollider.height = _characterMovementConfig.crouchedColliderHight;
-            _characterEnviormentCollider.center = _characterMovementConfig.crouchedColliderPosition * transform.up;
+            _characterEnviormentCollider.localScale = new Vector3(_characterMovementConfig.crouchedColliderRadius, _characterMovementConfig.crouchedColliderHight, _characterMovementConfig.crouchedColliderRadius);
+            _characterEnviormentCollider.localPosition = _characterMovementConfig.crouchedColliderPosition * transform.up;
         }
 
         private void CharacterDefault()
         {
             _characterHover.currentHoverHight = _characterMovementConfig.desieredHoverHight;
 
-            _characterEnviormentCollider.height = _characterMovementConfig.standingColliderHight;
-            _characterEnviormentCollider.center = _characterMovementConfig.standingColliderPosition * transform.up;
+            _characterEnviormentCollider.localScale = new Vector3(_characterMovementConfig.standingColliderRadius, _characterMovementConfig.standingColliderHight, _characterMovementConfig.standingColliderRadius);
+            _characterEnviormentCollider.localPosition = _characterMovementConfig.standingColliderPosition * transform.up;
             
         }
     }
