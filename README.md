@@ -10,4 +10,6 @@ you can also join project's [discord server](https://discord.gg/X2R49swy5n) if y
 
 Unity 2021.3.3f1
 
+[Git](https://git-scm.com/downloads)
+
 ### This readme is still being worked on
