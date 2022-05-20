@@ -8,6 +8,6 @@ you can also join project's [discord server](https://discord.gg/X2R49swy5n) if y
 
 ## Dependencies
 
-Unity 2021.3.1f1
+Unity 2021.3.3f1
 
 ### This readme is still being worked on
