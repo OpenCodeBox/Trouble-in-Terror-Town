@@ -5,8 +5,9 @@ namespace TTTSC.Player.NetworkedCharacter
 {
     public class NetworkCharacterStateMachine : NetworkBehaviour
     {
+        [SyncVar]
         public CharacterStates characterState;
-        [SyncVar(hook = nameof(HandleMovementStateChange))]
+        [SyncVar]
         public MovementStates movementState;
         public bool ceilingDetected;
         public bool eligibleForStep;
@@ -43,23 +44,6 @@ namespace TTTSC.Player.NetworkedCharacter
             InCar,
             InBoat,
             InProp
-        }
-
-        [Command]
-        private void HandleMovementStateChange(MovementStates oldMovementState, MovementStates newMovementState)
-        {
-            RpcSetMovementState(newMovementState);
-        }
-
-        [ClientRpc]
-        private void RpcSetMovementState(MovementStates newMovementState)
-        {
-            movementState = newMovementState;
-        }
-
-        private void HandleCharacterStateChange(CharacterStates oldCharacterState, CharacterStates newCharacterState)
-        {
-
         }
     }
 }

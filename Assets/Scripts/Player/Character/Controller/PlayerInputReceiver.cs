@@ -33,6 +33,8 @@ namespace TTTSC.Player.Character.Controller
 
             _networkIdentity = GetComponent<NetworkIdentity>();
 
+            _networkIdentity.AssignClientAuthority(_networkIdentity.connectionToClient);
+
             //
             #region GlobalControls
 
@@ -263,26 +265,18 @@ namespace TTTSC.Player.Character.Controller
 
         #region CrouchInputReciver
 
-        [Client]
+        
         private void CrouchInputReceiver(InputAction.CallbackContext ctx)
         {
             float value = ctx.ReadValue<float>();
 
             Debug.Log("CrouchInputReceiver: " + value);
 
-            if (isLocalPlayer)
-            {
-                Debug.Log("Sending crouch input to server");
-                CmdCrouchInput(FloatBool(value, "==", 1));
-            }
+            Debug.Log("Sending crouch input to server");
+            CrouchInputEvent?.Invoke(FloatBool(value, "==", 1));
+
         }
 
-        [Command]
-        private void CmdCrouchInput(bool performed)
-        {
-            Debug.Log("Crouch input received on server from" + _networkIdentity.netId);
-            CrouchInputEvent?.Invoke(performed);
-        }
 
         #endregion
 

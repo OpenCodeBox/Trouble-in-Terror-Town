@@ -7,7 +7,6 @@ namespace TTTSC.Player.Character
 {
     public class AliveReffrenceHub : MonoBehaviour
     {
-        public NetworkIdentity aliveNetworkIdentity;
         public Controller.CharacterMovementConfig characterMovementConfig;
         public Controller.CharacterStateMachine characterStateMachine;
         public Controller.GroundCheck characterHover;

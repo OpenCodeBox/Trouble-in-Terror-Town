@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using TTTSC.Player.NetworkedCharacter;
+
 public class TTTSC_NetworkManager : NetworkManager
 {
     [SerializeField]
     NetworkPresenceUtilities _networkPresenceUtilities;
-    
+
+
     public override void OnClientConnect(NetworkConnection conn)
     {
         base.OnClientConnect(conn);

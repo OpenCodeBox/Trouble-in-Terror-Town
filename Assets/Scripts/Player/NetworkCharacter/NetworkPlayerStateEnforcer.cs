@@ -51,7 +51,6 @@ namespace TTTSC.Player.NetworkedCharacter
             }
         }
 
-        [ClientRpc]
         public void SpawnAlivePlayerBody()
         {
             _playerInfoData.helth = 100;
@@ -64,10 +63,10 @@ namespace TTTSC.Player.NetworkedCharacter
             if (_aliveBody == null)
             {
                 _aliveBody = Instantiate(_aliveBodyPrefab, transform.position, transform.rotation, transform);
+                NetworkServer.Spawn(_aliveBody);
             }
         }
 
-        [ClientRpc]
         public void SpawnSpectatorPlayerBody()
         {
             if (_aliveBody != null)
@@ -79,11 +78,9 @@ namespace TTTSC.Player.NetworkedCharacter
 
             if (_spectatorBody == null)
             {
-                if (isServer)
-                {
-                    _spectatorBody = Instantiate(_spectatorBodyPrefab, transform.position, transform.rotation, transform);
-                    
-                }
+
+                _spectatorBody = Instantiate(_spectatorBodyPrefab, transform.position, transform.rotation, transform);
+                NetworkServer.Spawn(_spectatorBody);
             }
         }
 

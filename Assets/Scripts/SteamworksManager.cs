@@ -13,6 +13,7 @@ public class SteamworksManager : MonoBehaviour
     // Start is called before the first frame update
     public void SetSteamPresance(string valueName, string presanceText)
     {
+        Debug.Log("SetSteamPresance with key: " + valueName + " and content: " + presanceText);
         SteamFriends.SetRichPresence(valueName, presanceText);
     }
 

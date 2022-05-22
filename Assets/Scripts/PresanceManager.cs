@@ -15,6 +15,7 @@ public class PresanceManager : MonoBehaviour
     string maxPlayersInGame;
     string timeUntillGameEnds;
 
+    GameEventDataSet gameEventDataSet;
     private void OnEnable()
     {
         DontDestroyOnLoad(this);
@@ -26,7 +27,8 @@ public class PresanceManager : MonoBehaviour
     public void SetPresence(GameEventDataSet dataSet)
     {
         Debug.Log("attempting to set presence");
-        CheckDataSet(dataSet);
+        gameEventDataSet = dataSet;
+        CheckDataSet(gameEventDataSet);
     }
 
     public void CheckDataSet(GameEventDataSet dataSet)
@@ -65,7 +67,7 @@ public class PresanceManager : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("suceessfuly recived current gamemode " + state);
+                        Debug.Log("suceessfuly recived current gamemode " + gamemode);
                     }
                     break;
 
@@ -79,7 +81,7 @@ public class PresanceManager : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("suceessfuly recived map " + state);
+                        Debug.Log("suceessfuly recived map " + map);
                     }
                     break;
 
@@ -93,7 +95,7 @@ public class PresanceManager : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("suceessfuly recived the current amout of players " + state);
+                        Debug.Log("suceessfuly recived the current amout of players " + playersInGame);
                     }
                     break;
 
@@ -107,7 +109,7 @@ public class PresanceManager : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("suceessfuly recived the max amout of players " + state);
+                        Debug.Log("suceessfuly recived the max amout of players " + maxPlayersInGame);
                     }
                     break;
             }
@@ -116,18 +118,83 @@ public class PresanceManager : MonoBehaviour
         //await Task.WhenAll(task);
 
         Debug.Log("all data has been successfully checked, attempting setting presence");
-        UpdatePresenceStats();
         SetSteamPeresance();
         discordManager.SetPresence(state, gamemode, map, playersInGame, maxPlayersInGame);
+        UpdatePresenceStats();
         Debug.Log("attepting to update all platform presences");
     }
 
     private void UpdatePresenceStats()
     {
         steamworksManager.SetSteamPresance(valueName, gamemode);
-        steamworksManager.SetSteamPresance(valueName, map);
-        steamworksManager.SetSteamPresance(valueName, playersInGame);
-        steamworksManager.SetSteamPresance(valueName, maxPlayersInGame);
+
+        for (int data = 0; data < gameEventDataSet.gameEventData.Count; data++)
+        {
+            var currentData = gameEventDataSet.gameEventData[data];
+            //task[data] = currentData;
+            Debug.Log("there is " + gameEventDataSet.gameEventData.Count + " data set to check");
+
+
+            switch (currentData.valueName)
+            {
+
+                //
+                case "presence_gamemode":
+                    valueName = currentData.valueName;
+                    steamworksManager.SetSteamPresance(valueName, gamemode);
+                    if (gamemode == null || gamemode == "null")
+                    {
+                        Debug.Log("no gamemode was passed");
+                    }
+                    else
+                    {
+                        Debug.Log("steam suceessfuly recived current gamemode " + gamemode);
+                    }
+                    break;
+
+                //
+                case "presence_map":
+                    valueName = currentData.valueName;
+                    steamworksManager.SetSteamPresance(valueName, map);
+                    if (map == null || map == "null")
+                    {
+                        Debug.Log("no map was passed");
+                    }
+                    else
+                    {
+                        Debug.Log("steam suceessfuly recived map " + map);
+                    }
+                    break;
+
+                //
+                case "presence_playersInGame":
+                    valueName = currentData.valueName;
+                    steamworksManager.SetSteamPresance(valueName, playersInGame);
+                    if (playersInGame == null || playersInGame == "null")
+                    {
+                        Debug.Log("no player amout was passed");
+                    }
+                    else
+                    {
+                        Debug.Log("steam suceessfuly recived the current amout of players " + playersInGame);
+                    }
+                    break;
+
+                //
+                case "presence_maxPlayersInGame":
+                    valueName = currentData.valueName;
+                    steamworksManager.SetSteamPresance(valueName, maxPlayersInGame);
+                    if (maxPlayersInGame == null || maxPlayersInGame == "null")
+                    {
+                        Debug.Log("no state was passed");
+                    }
+                    else
+                    {
+                        Debug.Log("steam suceessfuly recived the max amout of players " + maxPlayersInGame);
+                    }
+                    break;
+            }
+        }
         Debug.Log("Updated steam presence stats");
     }
 

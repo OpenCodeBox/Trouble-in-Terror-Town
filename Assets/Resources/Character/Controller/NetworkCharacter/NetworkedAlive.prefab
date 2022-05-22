@@ -902,9 +902,11 @@ GameObject:
   m_Component:
   - component: {fileID: 2012543120969203555}
   - component: {fileID: 2774461514372533717}
+  - component: {fileID: 7159894118658290477}
   - component: {fileID: 2012543120969203567}
   - component: {fileID: 5998557319319874545}
   - component: {fileID: 2835173981838146917}
+  - component: {fileID: 1269850959387019397}
   - component: {fileID: 2716202054029851332}
   - component: {fileID: 7738513814173773324}
   - component: {fileID: 7874455332287569041}
@@ -945,11 +947,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a3c4a8867cd2f64e9f17bd9abc1f72a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aliveNetworkIdentity: {fileID: 5228559917914550197}
   characterMovementConfig: {fileID: 2012543120969203567}
   characterStateMachine: {fileID: 0}
   characterHover: {fileID: 0}
   characterStateChanger: {fileID: 0}
+--- !u!114 &7159894118658290477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012543120969203556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2065225f7daf0247af0ecc3bd961814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aliveNetworkIdentity: {fileID: 5228559917914550197}
+  networkCharacterMovementConfig: {fileID: 0}
+  networkCharacterStateMachine: {fileID: 0}
+  networkCharacterHover: {fileID: 0}
+  networkCharacterStateChanger: {fileID: 0}
 --- !u!114 &2012543120969203567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1012,6 +1030,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46a49060ecbe7a24d94402a041be9c9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1269850959387019397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012543120969203556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5cc54e44c2fd3747a35f1e5089efab9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  characterState: 0
+  movementState: 0
+  ceilingDetected: 0
+  eligibleForStep: 0
+  onLadder: 0
+  topOnLadder: 0
+  bottomOnLadder: 0
+  enteredLadderFromBottom: 0
+  enteredLadderFromTop: 0
+  topLadder: {fileID: 0}
+  bottomLadder: {fileID: 0}
 --- !u!114 &2716202054029851332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1024,8 +1067,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ece0bc79b10211544962d17c6381cf1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
 --- !u!114 &7738513814173773324
 MonoBehaviour:
   m_ObjectHideFlags: 0

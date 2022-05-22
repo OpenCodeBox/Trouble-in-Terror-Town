@@ -13,8 +13,8 @@ namespace TTTSC.Player.Character.PlayerCharacterInfo
         
         public enum playerPlayStates
         {
-            Spectator,
-            Alive
+            Alive,
+            Spectator
         };
 
         public playerPlayStates currentPlayerPlayState;
