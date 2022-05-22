@@ -32,8 +32,12 @@ namespace TTTSC.Player.Character.Controller
             playerInputEvents.Enable();
 
             _networkIdentity = GetComponent<NetworkIdentity>();
-
-            _networkIdentity.AssignClientAuthority(_networkIdentity.connectionToClient);
+            
+            
+            if (isServer)
+            {
+                _networkIdentity.AssignClientAuthority(_networkIdentity.connectionToClient);
+            }
 
             //
             #region GlobalControls

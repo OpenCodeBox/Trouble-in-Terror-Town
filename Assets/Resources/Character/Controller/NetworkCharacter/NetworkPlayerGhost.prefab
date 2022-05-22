@@ -137,6 +137,9 @@ MonoBehaviour:
     type: 3}
   _spectatorBodyPrefab: {fileID: 1135382073684329176, guid: b615186e864b86245a99d5258f67ae27,
     type: 3}
+  playerObjectList:
+  - playerGhost: {fileID: 0}
+    playerBody: {fileID: 0}
 --- !u!54 &5298965799069515050
 Rigidbody:
   m_ObjectHideFlags: 0

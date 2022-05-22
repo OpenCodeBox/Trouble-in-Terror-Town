@@ -20,6 +20,15 @@ namespace TTTSC.Player.NetworkedCharacter
         [SerializeField]
         [Tooltip("assign the 'dead' prefab here")]
         private GameObject _spectatorBodyPrefab;
+        [SerializeField]
+        private List<PlayerObject> playerObjectList;
+
+        [System.Serializable]
+        private class PlayerObject
+        {
+            public GameObject playerGhost;
+            public GameObject playerBody;
+        }
 
         private GameObject _aliveBody;
         private GameObject _spectatorBody;
@@ -64,6 +73,16 @@ namespace TTTSC.Player.NetworkedCharacter
             {
                 _aliveBody = Instantiate(_aliveBodyPrefab, transform.position, transform.rotation, transform);
                 NetworkServer.Spawn(_aliveBody);
+
+                GameObject _networkAliveBody = NetworkServer.spawned[(uint)NetworkServer.spawned.Count].gameObject;
+                
+                Debug.Log("spawned alive body with ID " + _aliveBody.GetComponent<NetworkIdentity>().netId);
+
+                if (_networkAliveBody != null)
+                {
+                    _networkAliveBody.transform.parent = transform;
+                }
+
             }
         }
 
