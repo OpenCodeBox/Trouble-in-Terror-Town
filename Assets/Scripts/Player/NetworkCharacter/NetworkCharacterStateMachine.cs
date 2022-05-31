@@ -1,7 +1,7 @@
 using UnityEngine;
 using Mirror;
     
-namespace TTTSC.Player.NetworkedCharacter
+namespace TTTSC.Player.NetworkCharacter
 {
     public class NetworkCharacterStateMachine : NetworkBehaviour
     {

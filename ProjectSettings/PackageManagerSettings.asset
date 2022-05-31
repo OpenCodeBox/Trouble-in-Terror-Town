@@ -33,7 +33,11 @@ MonoBehaviour:
     - com.adrenak.unimic
     - com.adrenak.univoice
     - com.charcolle.unityeditormemo
+    - com.cysharp.slnmerge
+    - com.lms.version
     - com.openupm
+    - com.sushiwaumai.chronity
+    - com.tayx.graphy
     - com.wooshii.hierarchydecorator
     - com.yasirkula.ingamedebugconsole
     - dev.chsxf.autoscene

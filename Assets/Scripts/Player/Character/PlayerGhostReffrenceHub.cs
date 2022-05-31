@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace TTTSC.Player.Character
@@ -8,6 +9,7 @@ namespace TTTSC.Player.Character
         public Rigidbody characterRigidbody;
         public Transform cameraTransform;
         public PlayerCharacterInfo.PlayerCharacterInfoData playerInfoData;
+        
         [Header("----------Scripts-----------")]
         public PlayerStateEnforcer playerStateEnforcrer;
         public PlayerStateMachine playerStateMachine;

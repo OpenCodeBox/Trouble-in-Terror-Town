@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5298965799069515053}
-  - component: {fileID: 5298965799069515046}
+  - component: {fileID: 9060809219817885018}
   - component: {fileID: 5298965799069515051}
   - component: {fileID: 5298965799069515054}
   - component: {fileID: 5193012033669626433}
@@ -71,7 +71,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5298965799069515046
+--- !u!114 &9060809219817885018
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -80,13 +80,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 5298965799069515057}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 495cd3a0a3a33904ab3473618f482aa4, type: 3}
+  m_Script: {fileID: 11500000, guid: e31737bd5bd14e54cb8b837df5656c7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   characterRigidbody: {fileID: 5298965799069515050}
   cameraTransform: {fileID: 0}
   playerInfoData: {fileID: 0}
-  playerStateEnforcrer: {fileID: 0}
+  playerStateEnforcrer: {fileID: 5193012033669626433}
   playerStateMachine: {fileID: 5298965799069515051}
   playerInputReceiver: {fileID: 5298965799069515054}
   gameManager: {fileID: 0}
@@ -131,15 +131,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _playerGhostReffrenceHub: {fileID: 5298965799069515046}
+  _playerGhostReffrenceHub: {fileID: 9060809219817885018}
   _playerInfoData: {fileID: 0}
   _aliveBodyPrefab: {fileID: 2012543120969203556, guid: d657db29cb7fd7c49a774f0d99fefb78,
     type: 3}
   _spectatorBodyPrefab: {fileID: 1135382073684329176, guid: b615186e864b86245a99d5258f67ae27,
     type: 3}
-  playerObjectList:
-  - playerGhost: {fileID: 0}
-    playerBody: {fileID: 0}
 --- !u!54 &5298965799069515050
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -901,16 +901,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2012543120969203555}
-  - component: {fileID: 2774461514372533717}
-  - component: {fileID: 7159894118658290477}
+  - component: {fileID: 1122485652432015870}
   - component: {fileID: 2012543120969203567}
   - component: {fileID: 5998557319319874545}
   - component: {fileID: 2835173981838146917}
   - component: {fileID: 1269850959387019397}
   - component: {fileID: 2716202054029851332}
   - component: {fileID: 7738513814173773324}
-  - component: {fileID: 7874455332287569041}
   - component: {fileID: 5228559917914550197}
+  - component: {fileID: -2632659586440853265}
   m_Layer: 3
   m_Name: NetworkedAlive
   m_TagString: Player
@@ -935,7 +934,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2774461514372533717
+--- !u!114 &1122485652432015870
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -944,30 +943,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2012543120969203556}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a3c4a8867cd2f64e9f17bd9abc1f72a, type: 3}
+  m_Script: {fileID: 11500000, guid: e2f15370edceb3b43ac91e3342926cd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   characterMovementConfig: {fileID: 2012543120969203567}
-  characterStateMachine: {fileID: 0}
-  characterHover: {fileID: 0}
-  characterStateChanger: {fileID: 0}
---- !u!114 &7159894118658290477
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2012543120969203556}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2065225f7daf0247af0ecc3bd961814, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  aliveNetworkIdentity: {fileID: 5228559917914550197}
-  networkCharacterMovementConfig: {fileID: 0}
-  networkCharacterStateMachine: {fileID: 0}
-  networkCharacterHover: {fileID: 0}
-  networkCharacterStateChanger: {fileID: 0}
+  characterStateMachine: {fileID: 1269850959387019397}
+  characterHover: {fileID: 5998557319319874545}
+  characterStateChanger: {fileID: 2716202054029851332}
 --- !u!114 &2012543120969203567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -990,10 +972,10 @@ MonoBehaviour:
   jumpForce: 3
   standingColliderPosition: 0.07
   standingColliderHight: 0.6
-  standingColliderRadius: 0
+  standingColliderRadius: 0.4
   crouchedColliderPosition: 0.24
   crouchedColliderHight: 0.4
-  crouchedColliderRadius: 0
+  crouchedColliderRadius: 0.4
   idleDrag: 10
   moveDrag: 5
   inAirDrag: 1
@@ -1018,6 +1000,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 056c12f3d440f8546b9ac56f7a99ddc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  _capsuleCastHight: 0.22
+  _capsuleCastRadius: 0.35
+  _aliveReffrenceHub: {fileID: 1122485652432015870}
+  _groundCheckOrigin: {fileID: 2012543120290741375}
+  _layerMask:
+    serializedVersion: 2
+    m_Bits: 576
+  currentHoverHight: 1.3
+  _capsuleMesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &2835173981838146917
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1030,6 +1023,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46a49060ecbe7a24d94402a041be9c9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  _playerGhostReffrenceHub: {fileID: 0}
+  _aliveReffrenceHub: {fileID: 1122485652432015870}
+  _autoB_Hop: 0
+  _hoverForceMode: 0
+  _moveForceMode: 0
+  _characterDrag: 0
 --- !u!114 &1269850959387019397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1067,6 +1068,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ece0bc79b10211544962d17c6381cf1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!114 &7738513814173773324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1079,31 +1082,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 513aa684d5e83a142bc0c9d18053daaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7874455332287569041
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2012543120969203556}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5cc54e44c2fd3747a35f1e5089efab9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  characterState: 0
-  movementState: 0
-  ceilingDetected: 0
-  eligibleForStep: 0
-  onLadder: 0
-  topOnLadder: 0
-  bottomOnLadder: 0
-  enteredLadderFromBottom: 0
-  enteredLadderFromTop: 0
-  topLadder: {fileID: 0}
-  bottomLadder: {fileID: 0}
+  _characterEnviormentCollider: {fileID: 2012543121633358167}
 --- !u!114 &5228559917914550197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1121,6 +1100,18 @@ MonoBehaviour:
   visible: 0
   m_AssetId: d657db29cb7fd7c49a774f0d99fefb78
   hasSpawned: 0
+--- !u!114 &-2632659586440853265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012543120969203556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c0e30f5736166943a9a159b1285d717, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2012543121125054948
 GameObject:
   m_ObjectHideFlags: 0

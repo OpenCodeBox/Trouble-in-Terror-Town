@@ -4,15 +4,13 @@ using UnityEngine;
 using Mirror;
 using TTTSC.Player.Character.Controller;
 
-namespace TTTSC.Player.NetworkedCharacter
+namespace TTTSC.Player.NetworkCharacter
 {
     public class NetworkAliveReffrenceHub : MonoBehaviour
     {
-        public NetworkIdentity aliveNetworkIdentity;
-        public CharacterMovementConfig networkCharacterMovementConfig;
-        public NetworkCharacterStateMachine networkCharacterStateMachine;
-        public NetworkCharacterHover networkCharacterHover;
-        public NetworkCharacterStateChanger networkCharacterStateChanger;
+        public CharacterMovementConfig characterMovementConfig;
+        public NetworkCharacterStateMachine characterStateMachine;
+        public NetworkCharacterHover characterHover;
+        public NetworkCharacterStateChanger characterStateChanger;
     }
 }
-

@@ -20,4 +20,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MovementTesting.unity
     guid: 00d316b566f339348a002fdf69b7fdf3
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: 57459ac3439177e4291e185cb9d40806,
+      type: 2}

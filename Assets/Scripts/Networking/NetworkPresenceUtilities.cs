@@ -6,21 +6,28 @@ using Mirror;
 
 public class NetworkPresenceUtilities : NetworkBehaviour
 {
+    [SerializeField]
     TTTSC_NetworkManager _networkManager;
+    [SerializeField]
     GameEventManager _gameEventManager;
     [SerializeField]
     GameEventDataSet _gameEventDataSet;
 
     private void Start()
     {
-        _networkManager = GetComponent<TTTSC_NetworkManager>();
-        _gameEventManager = GetComponent<GameEventManager>();
+        
+
         _gameEventDataSet = Instantiate(new GameEventDataSet());
         GameEventData _newEntry = new GameEventData();
+
+
     }
 
     public void CreateDataSet(GameEventDataSet dataSet, string state, string gamemode, string map, string playersInGame, string maxPlayersInGame)
     {
+        if (!isClient)
+            return;
+        
         Debug.Log("Checing passed data");
 
 
@@ -52,7 +59,7 @@ public class NetworkPresenceUtilities : NetworkBehaviour
                 //
                 case 2:
                     GameEventData gamemodeEntry = new GameEventData();
-                    gamemodeEntry.valueName =  "presence_gamemode";
+                    gamemodeEntry.valueName = "presence_gamemode";
                     if (gamemode == null || gamemode == "null")
                     {
                         Debug.Log("no gamemode was passed");
@@ -122,10 +129,14 @@ public class NetworkPresenceUtilities : NetworkBehaviour
         //await Task.WhenAll(task);
 
         Debug.Log("all data has been successfully edited");
+
     }
 
     public void UpdateDataSetValue(GameEventDataSet dataSet, string valueName, string value)
     {
+        if (!isClient)
+            return;
+
         Debug.Log("Checing passed data");
 
         for (int data = 0; data < dataSet.gameEventData.Count; data++)
@@ -140,21 +151,31 @@ public class NetworkPresenceUtilities : NetworkBehaviour
                 break;
             }
         }
+
+
     }
 
     [Client]
     public void ClientEnterGame(string gamemode, string map, string playersInGame, string maxPlayersInGame)
     {
+        if (!isClient)
+            return;
+
         Debug.Log("Checing passed data");
 
         CreateDataSet(_gameEventDataSet, "presence_InGame", gamemode, map, playersInGame, maxPlayersInGame);
 
         _gameEventManager.TriggerGameEvent("EnterGame");
+
+
     }
 
     [Client]
     public void ClientUpdatePresence(string valueName, string value)
     {
+        if (!isClient)
+            return;
+
         UpdateDataSetValue(_gameEventDataSet, valueName, value);
 
         Debug.Log("Asking clients to update player count");
@@ -164,8 +185,11 @@ public class NetworkPresenceUtilities : NetworkBehaviour
     [Client]
     public void UpdatePresence(string valueName, string value)
     {
+        if (!isClient)
+            return;
+
         UpdateDataSetValue(_gameEventDataSet, valueName, value);
-        
+
         Debug.Log("Asking clients to update player count");
         _gameEventManager.TriggerGameEvent("UpdatePlayerCount");
     }

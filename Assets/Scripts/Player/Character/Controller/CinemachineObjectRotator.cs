@@ -54,7 +54,8 @@ namespace TTTSC.Player.Character.Controller
                             {
                                 for (int i = 0; i < horizontalRotationTargets.Count; i++)
                                 {
-                                    horizontalRotationTargets[i].rotation = Quaternion.Euler(horizontalRotationTargets[i].up * rotationX);
+                                    if (horizontalRotationTargets[i] != null)
+                                       horizontalRotationTargets[i].rotation = Quaternion.Euler(horizontalRotationTargets[i].up * rotationX);
                                 }
                             }
                             break;

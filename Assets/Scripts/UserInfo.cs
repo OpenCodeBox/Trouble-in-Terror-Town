@@ -7,7 +7,6 @@ using UnityEngine;
 public class UserInfo : ScriptableObject
 {
     public string userName;
-    public string ID;
-    public string usedPlatform;
+    public string steamId;
     public Texture profilePicture;
 }

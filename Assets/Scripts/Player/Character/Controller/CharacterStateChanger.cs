@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Mirror;
 
 namespace TTTSC.Player.Character.Controller
 {
     [RequireComponent(typeof(CharacterStateMachine))]
-    public class CharacterStateChanger : NetworkBehaviour
+    public class CharacterStateChanger : MonoBehaviour
     {
         private PlayerGhostReffrenceHub _playerGhostReffrenceHub;
         private PlayerInputReceiver _playerInputReceiver;
@@ -41,41 +40,28 @@ namespace TTTSC.Player.Character.Controller
 
         private void Update()
         {
-            if (isLocalPlayer)
+
+            Debug.Log("I am the local player");
+
+            if (_crouchIsHeld && !_sprintIsPerforming)
             {
-                Debug.Log("I am the local player");
-                
-                if (_crouchIsHeld && !_sprintIsPerforming)
-                {
-                    CmdCrouch();
-                }
+                _characterStateMachine.movementStates = CharacterStateMachine.MovementStates.Crouching;
+            }
 
-                if (_walkIsPerforming && !_crouchIsHeld && !_sprintIsPerforming)
-                    _characterStateMachine.movementStates = CharacterStateMachine.MovementStates.Walking;
+            if (_walkIsPerforming && !_crouchIsHeld && !_sprintIsPerforming)
+                _characterStateMachine.movementStates = CharacterStateMachine.MovementStates.Walking;
 
-                if (_sprintIsPerforming && !_crouchIsHeld && _walkIsPerforming)
-                    _characterStateMachine.movementStates = CharacterStateMachine.MovementStates.Sprinting;
+            if (_sprintIsPerforming && !_crouchIsHeld && _walkIsPerforming)
+                _characterStateMachine.movementStates = CharacterStateMachine.MovementStates.Sprinting;
 
 
-                if (!_walkIsPerforming && !_crouchIsHeld && !_sprintIsPerforming)
-                {
-                    _characterStateMachine.movementStates = CharacterStateMachine.MovementStates.Idle;
-                }
+            if (!_walkIsPerforming && !_crouchIsHeld && !_sprintIsPerforming)
+            {
+                _characterStateMachine.movementStates = CharacterStateMachine.MovementStates.Idle;
             }
 
         }
 
-        [Command]
-        void CmdCrouch()
-        {
-            RpcCrouch();
-        }
-        
-        [ClientRpc]
-        void RpcCrouch()
-        {
-            _characterStateMachine.movementStates = CharacterStateMachine.MovementStates.Crouching;
-        }
     }
 }
 

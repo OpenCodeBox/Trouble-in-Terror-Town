@@ -19,25 +19,33 @@ namespace TTTSC.Player.Character.Controller
         #region SpectatorControls
         public event Action<Vector2, bool> SpectatorScrollSpeedInputEvent;
         public event Action<bool> SpectatorFlyFastInputEvent, SpectatorFlySlowInputEvent, SpectatorFlyUpInputEvent, SpectatorFlyDownInputEvent;
-        
+
         bool _spectatorSpeedUpIsHeld, _spectatorSlowDownIsHeld, _flyUpIsHeld, _flyDownIsHeld;
         #endregion
 
         public PlayerInputSender playerInputEvents;
 
-        private void Awake()
+        private void Start()
         {
+            Debug.Log("PlayerInputReceiver is still here");
+
             playerInputEvents = new PlayerInputSender();
 
             playerInputEvents.Enable();
 
             _networkIdentity = GetComponent<NetworkIdentity>();
-            
-            
-            if (isServer)
+
+
+            if (isServerOnly)
             {
                 _networkIdentity.AssignClientAuthority(_networkIdentity.connectionToClient);
+                Debug.LogWarning("I'm server, and I have assigned authority to client");
             }
+            else if (isClientOnly)
+            {
+                Debug.LogWarning("I'm not server, so I'm probably a clien with authority, ... or maybe I'm a client but I'm not the one who has authority");
+            }
+
 
             //
             #region GlobalControls
@@ -68,10 +76,15 @@ namespace TTTSC.Player.Character.Controller
             playerInputEvents.SpectatorControls.FlyDown.performed += SpectatorFlyDownInputReceiver;
 
             #endregion
+
+
         }
 
         private void OnDisable()
         {
+            if (playerInputEvents == null)
+                return;
+            
             playerInputEvents.Disable();
 
             //
@@ -99,7 +112,7 @@ namespace TTTSC.Player.Character.Controller
             #region SpectatorControls
 
             playerInputEvents.SpectatorControls.FlyFast.started -= SpectatorFlyFastInputReceiver;
-            playerInputEvents.SpectatorControls.FlySlow.started -= SpectatorFlySlowInputReceiver;;
+            playerInputEvents.SpectatorControls.FlySlow.started -= SpectatorFlySlowInputReceiver; ;
             playerInputEvents.SpectatorControls.FlyUp.started -= SpectatorFlyUpInputReceiver;
             playerInputEvents.SpectatorControls.FlyDown.performed -= SpectatorFlyDownInputReceiver;
 
@@ -193,7 +206,7 @@ namespace TTTSC.Player.Character.Controller
 
         #region GlobalControls
 
-        
+
         [Client]
         private void LookXInputReceiver(InputAction.CallbackContext ctx)
         {
@@ -240,7 +253,7 @@ namespace TTTSC.Player.Character.Controller
         {
             MoveInputEvent?.Invoke(value, performing);
         }
-        
+
         #endregion
 
 
@@ -258,7 +271,7 @@ namespace TTTSC.Player.Character.Controller
             }
 
         }
-        
+
         [Command]
         private void CmdSprintInput(bool performed)
         {
@@ -269,7 +282,7 @@ namespace TTTSC.Player.Character.Controller
 
         #region CrouchInputReciver
 
-        
+
         private void CrouchInputReceiver(InputAction.CallbackContext ctx)
         {
             float value = ctx.ReadValue<float>();
@@ -285,7 +298,7 @@ namespace TTTSC.Player.Character.Controller
         #endregion
 
         #region JumpInputReciver
-        
+
         [Client]
         private void JumpInputReceiver(InputAction.CallbackContext ctx)
         {
@@ -304,7 +317,7 @@ namespace TTTSC.Player.Character.Controller
         {
             JumpInputEvent?.Invoke(performed);
         }
-        
+
 
         #endregion
 
@@ -324,7 +337,7 @@ namespace TTTSC.Player.Character.Controller
                 CmdSpectatorFlyFast(FloatBool(value, "==", 1));
             }
         }
-        
+
         [Command]
         private void CmdSpectatorFlyFast(bool performed)
         {
@@ -369,7 +382,7 @@ namespace TTTSC.Player.Character.Controller
 
         #endregion
 
-        
+
         #region SpectatorFlyDown
         private void SpectatorFlyDownInputReceiver(InputAction.CallbackContext ctx)
         {
@@ -384,7 +397,7 @@ namespace TTTSC.Player.Character.Controller
         }
 
         #endregion
-        
+
         #endregion
     }
 }

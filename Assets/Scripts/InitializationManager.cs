@@ -13,20 +13,13 @@ public class InitializationManager : MonoBehaviour
     void OnEnable()
     {
         startArguments = Environment.GetCommandLineArgs();
-
-#if !UNITY_EDITOR
-        PlatformLogin();
-        AppMode();
-#endif
-
     }
 
-#if UNITY_EDITOR
     private void OnGUI()
     {
         if (GUILayout.Button("Log in with steam"))
         {
-            steamworks_Login.SteamEOSLogin();
+            steamworks_Login.SteamLogin();
         }
 
         /*
@@ -35,7 +28,6 @@ public class InitializationManager : MonoBehaviour
             steamworks_Login.SteamLogin();
         }*/
     }
-#endif
 
 #if !UNITY_EDITOR
     private void PlatformLogin()
@@ -47,10 +39,7 @@ public class InitializationManager : MonoBehaviour
             switch (startArguments[1])
             {
                 case "-SteamLogin":
-                    steamworks_Login.SteamEOSLogin();
-                    break;
-                case "-EpicLogin":
-                    Debug.Log("Loging in with epic");
+                    steamworks_Login.SteamLogin();
                     break;
                 case "-XboxLogin":
                     Debug.Log("Loging in with xbox");
@@ -84,9 +73,4 @@ public class InitializationManager : MonoBehaviour
     }
 #endif
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }
