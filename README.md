@@ -1,4 +1,4 @@
-#NOTICE
+# NOTICE
 This repo hasen't recived any commits for a while, the newest version is held on a private git server, there will be a new commit when all the ground work is done for TTT (Character controller, item framework, invenotry, network synchronization)
 
 ![TTTSC Logo](https://media.discordapp.net/attachments/843233727119491082/934783163383828490/TTTSC_logo_new_2.png)
