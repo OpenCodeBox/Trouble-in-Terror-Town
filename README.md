@@ -16,5 +16,3 @@ If you’ve heard of non-digital party games like Werewolf or Mafia, or a digita
 Unity 2021.3.3f1
 
 [Git](https://git-scm.com/downloads)
-
-### This readme is still being worked on
